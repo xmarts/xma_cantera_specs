@@ -310,6 +310,30 @@ class SpecsSale(models.Model):
 		'door.glass.specs',
 		'glass_id'
 	)
+	specs_tramrec = fields.Float(
+    	string='Tramo Recto (pulg lineales)',
+     	digits=(12, 4)
+    )
+	specs_traminc = fields.Float(
+    	string='Tramo Inclinado (pulg lineales)',
+     	digits=(12, 4)
+    )
+	specs_tramcurniv = fields.Float(
+    	string='Tramo Curvo a nivel (pulg lineales)',
+     	digits=(12, 4)
+    )
+	specs_tramcurin = fields.Float(
+    	string='Tramo Curvo inclinado (pulg lineales)',
+     	digits=(12, 4)
+    )
+	specs_pasrec = fields.Float(
+    	string='Pasamanos recto o inclinado (pulg lineales)',
+     	digits=(12, 4)
+    )
+	specs_newdec = fields.Float(
+    	string='Pasamanos curvos a nivel o curvo inclinado (pulg lineales)',
+     	digits=(12, 4)
+    )
  
 	@api.onchange('specs_ant', 'specs_alt')
 	def square_feet(self):

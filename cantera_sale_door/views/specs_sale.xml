@@ -64,6 +64,12 @@
                                         <field name="specs_altleaft" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_board_id" attrs="{'invisible': [('specs_type', '!=', 'door')]}"/>
                                         <field name="specs_altboard" attrs="{'invisible': [('specs_type', '!=', 'door')]}"/>
+                                        <field name="specs_tramrec" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
+                                        <field name="specs_traminc" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
+                                        <field name="specs_tramcurniv" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
+                                        <field name="specs_tramcurin" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
+                                        <field name="specs_pasrec" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
+                                        <field name="specs_newdec" attrs="{'invisible': [('specs_type', '!=', 'railing')]}"/>
                                         <field name="specs_huacal"/>
                                     </group>
                                     <group>
