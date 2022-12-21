@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+
+        <record id="door_flashing_view_tree" model="ir.ui.view">
+            <field name="name">door.flashing.view.tree</field>
+            <field name="model">door.flashing</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Tipo de Flashing">
+                    <field name="name"/>
+                    <field name="price"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_flashing" model="ir.actions.act_window">
+            <field name="name">Tipo de Flashing</field>
+            <field name="res_model">door.flashing</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="door_flashing_sub_menu" name="Tipo de Flashing" action="action_door_flashing" parent="cantera_sale_door.protections_indicator" sequence="2"/>
+
+  </data>
+</odoo>

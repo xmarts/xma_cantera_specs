@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+        <record id="door_type_arct_view_tree" model="ir.ui.view">
+            <field name="name">door.type.arct.view.tree</field>
+            <field name="model">door.type.arct</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Tipo de arco en transom">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_type_arct" model="ir.actions.act_window">
+            <field name="name">Tipo de arco en transom</field>
+            <field name="res_model">door.type.arct</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="Transom_indicator" name="Transom" parent="offering_menu" sequence="7"/>
+            <menuitem id="door_type_arct_sub_menu" name="Tipo de arco en transom" action="action_door_type_arct" parent="cantera_sale_door.Transom_indicator" sequence="1"/>
+
+  </data>
+</odoo>

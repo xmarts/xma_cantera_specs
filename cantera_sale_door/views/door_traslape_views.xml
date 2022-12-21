@@ -1,0 +1,43 @@
+<odoo>
+  <data>
+
+        <record id="door_traslape_int_view_tree" model="ir.ui.view">
+            <field name="name">door.traslape.int.view.tree</field>
+            <field name="model">door.traslape.int</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Traslape Internas">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="door_traslape_ext_view_tree" model="ir.ui.view">
+            <field name="name">door.traslape.ext.view.tree</field>
+            <field name="model">door.traslape.ext</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Traslape Externa">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_traslape_int" model="ir.actions.act_window">
+            <field name="name">Traslape Internas</field>
+            <field name="res_model">door.traslape.int</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="action_door_traslape_ext" model="ir.actions.act_window">
+            <field name="name">Traslape Externa</field>
+            <field name="res_model">door.traslape.ext</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        
+        <menuitem id="door_traslape_int_sub_menu" name="Traslape Internas" action="action_door_traslape_int" parent="cantera_sale_door.frame_brickmolding_indicator" sequence="3"/>
+        <menuitem id="door_traslape_ext_sub_menu" name="Traslape Externas" action="action_door_traslape_ext" parent="cantera_sale_door.frame_brickmolding_indicator" sequence="4"/>
+
+  </data>
+</odoo>

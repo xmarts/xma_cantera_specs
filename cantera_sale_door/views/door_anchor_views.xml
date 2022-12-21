@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+        <record id="door_anchor_view_tree" model="ir.ui.view">
+            <field name="name">door.anchor.view.tree</field>
+            <field name="model">door.anchor</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Ancla">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_anchor" model="ir.actions.act_window">
+            <field name="name">Ancla</field>
+            <field name="res_model">door.anchor</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="frame_indicator" name="Frame" parent="offering_menu" sequence="3"/>
+            <menuitem id="door_anchor_sub_menu" name="Ancla" action="action_door_anchor" parent="frame_indicator" sequence="1"/>
+
+  </data>
+</odoo>

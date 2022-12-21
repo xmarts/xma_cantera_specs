@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+        <record id="door_smock_view_tree" model="ir.ui.view">
+            <field name="name">door.smock.view.tree</field>
+            <field name="model">door.smock</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Tipo de Guardapolvo">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_smock" model="ir.actions.act_window">
+            <field name="name">Tipo de Guardapolvo</field>
+            <field name="res_model">door.smock</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="protections_indicator" name="proteciones" parent="offering_menu" sequence="10"/>
+            <menuitem id="door_smock_sub_menu" name="Tipo de Guardapolvo" action="action_door_smock" parent="protections_indicator" sequence="1"/>
+
+  </data>
+</odoo>

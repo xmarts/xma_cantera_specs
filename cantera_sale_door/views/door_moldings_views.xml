@@ -1,0 +1,43 @@
+<odoo>
+  <data>
+
+        <record id="door_molding_int_view_tree" model="ir.ui.view">
+            <field name="name">door.molding.int.view.tree</field>
+            <field name="model">door.molding.int</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Molduras Internas">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="door_molding_ext_view_tree" model="ir.ui.view">
+            <field name="name">door.molding.ext.view.tree</field>
+            <field name="model">door.molding.ext</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Molduras Externa">
+                    <field name="name"/>
+                    <field name="price" widget="monetary"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_door_molding_int" model="ir.actions.act_window">
+            <field name="name">Molduras Internas</field>
+            <field name="res_model">door.molding.int</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <record id="action_door_molding_ext" model="ir.actions.act_window">
+            <field name="name">Molduras Externa</field>
+            <field name="res_model">door.molding.ext</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="frame_brickmolding_indicator" name="Frame Brickmolding" parent="offering_menu" sequence="4"/>
+            <menuitem id="door_molding_int_sub_menu" name="Molduras Internas" action="action_door_molding_int" parent="frame_brickmolding_indicator" sequence="1"/>
+            <menuitem id="door_molding_ext_sub_menu" name="Molduras Externas" action="action_door_molding_ext" parent="frame_brickmolding_indicator" sequence="2"/>
+
+  </data>
+</odoo>
