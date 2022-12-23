@@ -1,21 +1,14 @@
 from odoo import _, api, fields, models
 
 class DoorMoldingInt(models.Model):
-    _name = 'door.molding.int'
+    _name = 'door.molding'
     
     name = fields.Char(
         string='Nombre'
     )
-    price = fields.Float(
-        string='Precio'
+    price_sd = fields.Float(
+        string='Precio Single Door'
     )
-    
-class DoorMoldingExt(models.Model):
-    _name = 'door.molding.ext'
-    
-    name = fields.Char(
-        string='Nombre'
-    )
-    price = fields.Float(
-        string='Precio'
+    price_dd = fields.Float(
+        string='Precio Doble Door'
     )

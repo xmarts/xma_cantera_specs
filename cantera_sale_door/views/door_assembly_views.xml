@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <tree editable="bottom" string="Preparación de Ensamble">
                     <field name="name"/>
-                    <field name="price"/> 
+                    <field name="price" widget="monetary"/> 
                 </tree>
             </field>
         </record>

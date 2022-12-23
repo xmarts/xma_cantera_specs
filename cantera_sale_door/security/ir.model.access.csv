@@ -12,10 +12,8 @@ access_door_type_arc,door.type.arc,model_door_type_arc,,1,1,1,1
 access_door_type_glass,door.type.glass,model_door_type_glass,,1,1,1,1
 access_door_anchor,door.anchor,model_door_anchor,,1,1,1,1
 access_door_hinges,door.hinges,model_door_hinges,,1,1,1,1
-access_door_moldings,door.moldings,model_door_molding_int,,1,1,1,1
-access_door_moldings2,door.moldings2,model_door_molding_ext,,1,1,1,1
-access_door_traslape,door.traslape,model_door_traslape_int,,1,1,1,1
-access_door_traslape2,door.traslape2,model_door_traslape_ext,,1,1,1,1
+access_door_moldings,door.moldings,model_door_molding,,1,1,1,1
+access_door_traslape,door.traslape,model_door_traslape,,1,1,1,1
 access_door_metal,door.metal,model_door_metal,,1,1,1,1
 access_door_lock,door.lock,model_door_lock,,1,1,1,1
 access_door_pull_handels,door.pull.handels,model_door_pull_handles,,1,1,1,1
@@ -34,3 +32,4 @@ access_door_glass_piece,door.glass.piece,model_door_glass_piece,,1,1,1,1
 access_door_handing_glass,door.handing.glass,model_door_handing_glass,,1,1,1,1
 access_door_radius,door.radius,model_door_radius,,1,1,1,1
 access_door_glass_specs,door.glass.specs,model_door_glass_specs,,1,1,1,1
+access_door_family,door.family,model_door_family,,1,1,1,1

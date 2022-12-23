@@ -2,9 +2,15 @@
 
 from odoo import _, api, fields, models
 
+import logging
+
+_logger =logging.getLogger(__name__)
+
 class SpecsSale(models.Model):
 	_name = 'specs.sale'
 	_inherit = ['mail.thread', 'mail.activity.mixin']
+	_rec_name = 'name_specs'
+
 
 	specs_type = fields.Selection(
 		[('door', 'Puerta'),
@@ -25,14 +31,8 @@ class SpecsSale(models.Model):
 		string='guia'
 	)
 	specs_product_id = fields.Many2one(
-		'product.category',
+		'door.family',
 		string='Familia de producto'
-	)
-	specs_sd = fields.Boolean(
-		string='single door'
-	)
-	specs_dd = fields.Boolean(
-		string='Double Door'
 	)
 	specs_dc_id = fields.Many2one(
 		'door.configuration',
@@ -126,7 +126,7 @@ class SpecsSale(models.Model):
     )
 	specs_tolsup = fields.Float(
     	string='Tolerancia Superior (hoja y marco sup)',
-     	digits=(12, 4)
+     	digits=(12, 4) 
     )
 	specs_tolcen = fields.Float(
     	string='Tolerancia Central (entre hoja y hoja)',
@@ -165,19 +165,19 @@ class SpecsSale(models.Model):
     	string='Cantidad de Bisagras'
     )
 	specs_molding_int_id = fields.Many2one(
-		'door.molding.int',
+		'door.molding',
 		string='Moldura Interna'
 	)
 	specs_molding_ext_id = fields.Many2one(
-		'door.molding.ext',
+		'door.molding',
 		string='Moldura Externa'
 	)
 	specs_traslape_int_id = fields.Many2one(
-		'door.traslape.int',
+		'door.traslape',
 		string='Traslape Externa'
 	)
 	specs_traslape_ext_id = fields.Many2one(
-		'door.traslape.ext',
+		'door.traslape',
 		string='Traslape Externa'
 	)
 	specs_jac_id = fields.Many2one(
@@ -334,22 +334,58 @@ class SpecsSale(models.Model):
     	string='Pasamanos curvos a nivel o curvo inclinado (pulg lineales)',
      	digits=(12, 4)
     )
+	specs_cls = fields.Integer(
+    	string='Cantidad Picaporte Superior'
+    )
+	specs_cli = fields.Integer(
+    	string='Cantidad Picaporte Inferior'
+    )
+	name_specs = fields.Char(
+		compute='name_create'
+	)
  
-	@api.onchange('specs_ant', 'specs_alt')
+	@api.constrains(
+		'specs_ant', 'specs_alt','specs_product_id','specs_dc_id','specs_molding_ext_id',
+		'specs_molding_int_id','specs_flashing_id','specs_typeguar_id','specs_latchsup_id',
+		'specs_latchin_id','specs_jac_id','specs_jacin_id','specs_jin_id','specs_jinin_id',
+		'specs_cls','specs_cli'
+
+	)
 	def square_feet(self):
 		for rec in self:
 			ant = rec.specs_ant * 0.0254
 			alt = rec.specs_alt * 0.0254
-			rec.specs_mtrs = ant * alt
+			total = ant * alt
+			rec.specs_mtrs = total
+			price_family = rec.specs_product_id.price * total
+			if str(rec.specs_dc_id.name)[:2] == 'SD':
+				configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
+				flashing = rec.specs_flashing_id.price_sd
+				smock = rec.specs_typeguar_id.price_sd
+			elif str(rec.specs_dc_id.name)[:2] == 'DD':
+				configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
+				flashing = rec.specs_flashing_id.price_dd
+				smock = rec.specs_typeguar_id.price_dd
+			else:
+				configuration = 0
+				flashing = 0
+				smock = 0
+			latch = (rec.specs_latchsup_id.price * rec.specs_cls) + (rec.specs_latchin_id.price * rec.specs_cli)
+			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
+			family_conf = price_family + configuration + flashing + smock + latch + handled
+			_logger.info(family_conf,'################################################################################333')
+			rec.specs_amount_total = family_conf
    
-	@api.onchange('specs_sd')
-	def sd_change(self):
+	def name_create(self):
 		for rec in self:
-			if rec.specs_sd == True:
-				rec.specs_dd = False
+			rec.name_specs=''
+			if rec.specs_type == 'door':
+				value = 'Puerta'
+			if rec.specs_type == 'windows':
+				value = 'Ventana'
+			if rec.specs_type == 'railing':
+				value = 'Barandal'
+			nombre =value+' '+str(rec.specs_dc_id.name)+' '+str(rec.specs_product_id.name)
+			if rec.specs_type:
+				rec.name_specs=nombre
 	
-	@api.onchange('specs_dd')	
-	def dd_change(self):
-		for rec in self:
-			if rec.specs_dd == True:
-				rec.specs_sd = False

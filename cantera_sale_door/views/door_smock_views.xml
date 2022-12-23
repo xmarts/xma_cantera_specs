@@ -5,9 +5,10 @@
             <field name="name">door.smock.view.tree</field>
             <field name="model">door.smock</field>
             <field name="arch" type="xml">
-                <tree editable="bottom" string="Tipo de Guardapolvo">
+                <tree editable="bottom">
                     <field name="name"/>
-                    <field name="price" widget="monetary"/> 
+                    <field name="price_sd" widget="monetary"/> 
+                    <field name="price_dd" widget="monetary"/>
                 </tree>
             </field>
         </record>

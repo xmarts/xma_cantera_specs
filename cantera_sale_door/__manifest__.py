@@ -29,6 +29,7 @@
 
     # always loaded
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/specs_sale.xml',
         'views/door_configuration_views.xml',
@@ -63,6 +64,7 @@
         'views/door_handing_glass_views.xml',
         'views/door_radius_views.xml',
         'views/door_glass_specs_views.xml',
+        'views/door_family_views.xml',
         'report/report_cantera_specs.xml'
     ],
     # only loaded in demonstration mode

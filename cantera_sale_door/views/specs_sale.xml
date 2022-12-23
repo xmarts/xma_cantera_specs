@@ -9,28 +9,13 @@
                         <group>
                             <group>
                                 <field name="specs_type"/>
+                                <field name="name_specs" invisible='1'/>
                             </group>
                             <group>
-                                <group>
-                                    <field name="specs_sd"/>
-                                </group>
-                                <group>
-                                    <field name="specs_dd"/>
-                                    <div>
-                                    </div>
-                                </group>
-                            </group>
-                        </group>
-                        <group>
-                            <group>
-                            </group>
-                            <group>
-                                <group> 
-                                </group>
                                 <group>
                                     <div>
-                                        <label for="specs_amount_total"/>
-                                        <h1><field name="specs_amount_total" string="" widget='monetary' readonly='1'/></h1>
+                                        <label for="specs_amount_total" groups='cantera_sale_door.cant_ventas,cantera_sale_door.cant_administrador'/>
+                                        <h1><field name="specs_amount_total" string="" widget='monetary' readonly='1' groups='cantera_sale_door.cant_ventas,cantera_sale_door.cant_administrador'/></h1>
                                     </div>
                                 </group>
                             </group>
@@ -150,12 +135,14 @@
                                 </field>
                                 <group>
                                     <group string='Latch'>
-                                        <field name="specs_latchsup_id" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
-                                        <field name="specs_latchin_id" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
+                                        <field name="specs_latchsup_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
+                                        <field name="specs_cls" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
+                                        <field name="specs_latchin_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
+                                        <field name="specs_cli" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                     </group>
                                     <group string='protections'>
-                                        <field name="specs_tolerance" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
-                                        <field name="specs_typeguar_id" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
+                                        <field name="specs_tolerance" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
+                                        <field name="specs_typeguar_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_flashing_id"/>
                                         <field name="specs_assembly_id"/>
                                     </group>

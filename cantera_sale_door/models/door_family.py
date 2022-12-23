@@ -1,7 +1,7 @@
 from odoo import _, api, fields, models
 
-class DoorTraslapeInt(models.Model):
-    _name = 'door.traslape'
+class DoorFamily(models.Model):
+    _name = 'door.family'
     
     name = fields.Char(
         string='Nombre'
