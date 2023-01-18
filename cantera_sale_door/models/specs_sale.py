@@ -343,12 +343,17 @@ class SpecsSale(models.Model):
 	name_specs = fields.Char(
 		compute='name_create'
 	)
+	railing_id = fields.Many2one(
+		'railing',
+		string='Railing'
+	)
  
 	@api.constrains(
 		'specs_ant', 'specs_alt','specs_product_id','specs_dc_id','specs_molding_ext_id',
 		'specs_molding_int_id','specs_flashing_id','specs_typeguar_id','specs_latchsup_id',
 		'specs_latchin_id','specs_jac_id','specs_jacin_id','specs_jin_id','specs_jinin_id',
-		'specs_cls','specs_cli'
+		'specs_cls','specs_cli','specs_tramrec','specs_traminc','specs_tramcurniv',
+  		'specs_tramcurin','specs_pasrec','specs_newdec'
 
 	)
 	def square_feet(self):
@@ -358,21 +363,55 @@ class SpecsSale(models.Model):
 			total = ant * alt
 			rec.specs_mtrs = total
 			price_family = rec.specs_product_id.price * total
-			if str(rec.specs_dc_id.name)[:2] == 'SD':
-				configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
-				flashing = rec.specs_flashing_id.price_sd
-				smock = rec.specs_typeguar_id.price_sd
-			elif str(rec.specs_dc_id.name)[:2] == 'DD':
-				configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
-				flashing = rec.specs_flashing_id.price_dd
-				smock = rec.specs_typeguar_id.price_dd
-			else:
-				configuration = 0
-				flashing = 0
-				smock = 0
+			if rec.specs_type == 'door' or rec.specs_type == 'windows':
+				if str(rec.specs_dc_id.name)[:2] == 'SD':
+					flashing = rec.specs_flashing_id.price_sd
+					smock = rec.specs_typeguar_id.price_sd
+				if str(rec.specs_dc_id.name)[:2] == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
+					flashing = rec.specs_flashing_id.price_dd
+				if str(rec.specs_dc_id.name)[:2] == 'DD':
+					flashing = rec.specs_flashing_id.price_dd
+					smock = rec.specs_typeguar_id.price_dd
+				if str(rec.specs_dc_id.name)[:2] == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
+						configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
+				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
+					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
+						configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
+				else:
+					configuration = 0
+					flashing = 0
+					smock = 0
+			if rec.specs_type == 'railing':
+				if rec.specs_tramrec:
+					linea = self.env['railing'].search([('name', '=', 'Straight')])
+					tramo_recto = rec.specs_tramrec * linea.price 
+				if rec.specs_traminc:
+					inclinado = self.env['railing'].search([('name', '=', 'Raked')])
+					tramo_inclinado = rec.specs_traminc * inclinado.price 
+				if rec.specs_tramcurniv:
+					curv_niv = self.env['railing'].search([('name', '=', 'Curved')])
+					curvo_nivel = rec.specs_tramcurniv * curv_niv.price 
+				if rec.specs_tramcurin:
+					curv_inc = self.env['railing'].search([('name', '=', 'Curved Raked')])
+					curvo_inclin = rec.specs_tramcurin * curv_inc.price 
+				if rec.specs_pasrec:
+					pas_rec_inc = self.env['railing'].search([('name', '=', 'Handrail S o R')])
+					pass_rec_inc = rec.specs_pasrec * pas_rec_inc.price
+				if rec.specs_newdec:
+					pas_cur = self.env['railing'].search([('name', '=', 'Handrail C o CR')])
+					pass_cur = rec.specs_newdec * pas_cur.price 
+				else:	
+					tramo_recto = 0
+					tramo_inclinado = 0
+					curvo_nivel = 0
+					curvo_inclin = 0
+					pass_rec_inc = 0
+					pass_cur = 0
+			total_railing = tramo_recto + tramo_inclinado + curvo_nivel + curvo_inclin + pass_rec_inc + pass_cur
 			latch = (rec.specs_latchsup_id.price * rec.specs_cls) + (rec.specs_latchin_id.price * rec.specs_cli)
 			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
-			family_conf = price_family + configuration + flashing + smock + latch + handled
+			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			_logger.info(family_conf,'################################################################################333')
 			rec.specs_amount_total = family_conf
    

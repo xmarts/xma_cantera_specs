@@ -33,3 +33,4 @@ access_door_handing_glass,door.handing.glass,model_door_handing_glass,,1,1,1,1
 access_door_radius,door.radius,model_door_radius,,1,1,1,1
 access_door_glass_specs,door.glass.specs,model_door_glass_specs,,1,1,1,1
 access_door_family,door.family,model_door_family,,1,1,1,1
+access_railing,railing,model_railing,,1,1,1,1
