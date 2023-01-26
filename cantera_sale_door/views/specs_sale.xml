@@ -117,6 +117,7 @@
                                         <field name="specs_ddm"/>
                                         <field name="specs_altpc" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
                                         <field name="specs_anpc" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
+                                        <field name="railing_id" invisible='1'/>
                                     </group>
                                     <group string='Sidelight'>
                                         <field name="specs_anfi"/>
