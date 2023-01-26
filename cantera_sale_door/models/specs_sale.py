@@ -411,16 +411,10 @@ class SpecsSale(models.Model):
 					pass_cur = 0.00
 			else:
 				continue
-			_logger.info(tramo_recto,'################################################################################333')
-			_logger.info(tramo_inclinado,'################################################################################333')
-			_logger.info(curvo_nivel,'################################################################################333')
-			_logger.info(curvo_inclin,'################################################################################333')
-			_logger.info(pass_rec_inc,'################################################################################333')
-			_logger.info(pass_cur,'################################################################################333')
-			# total_railing = tramo_recto + tramo_inclinado + curvo_nivel + curvo_inclin + pass_rec_inc + pass_cur
+			total_railing = tramo_recto + tramo_inclinado + curvo_nivel + curvo_inclin + pass_rec_inc + pass_cur
 			latch = (rec.specs_latchsup_id.price * rec.specs_cls) + (rec.specs_latchin_id.price * rec.specs_cli)
 			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
-			family_conf = price_family + configuration + flashing + smock + latch + handled
+			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
    
 	def name_create(self):
