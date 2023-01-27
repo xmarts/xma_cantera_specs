@@ -360,6 +360,17 @@ class SpecsSale(models.Model):
 		for rec in self:
 			ant = rec.specs_ant * 0.0254
 			alt = rec.specs_alt * 0.0254
+			configuration = 0.00
+			flashing = 0.00
+			smock = 0.00
+			latch = 0.00
+			handled = 0.00
+			tramo_recto = 0.00
+			tramo_inclinado = 0.00
+			curvo_nivel = 0.00
+			curvo_inclin = 0.00
+			pass_rec_inc = 0.00
+			pass_cur = 0.00
 			total = ant * alt
 			rec.specs_mtrs = total
 			price_family = rec.specs_product_id.price * total
@@ -378,11 +389,10 @@ class SpecsSale(models.Model):
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
 						configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
-						_logger.info(configuration,'################################################################################333')
-				else:
-					configuration = 0
-					flashing = 0
-					smock = 0
+				# else:
+				# 	configuration = 0
+				# 	flashing = 0
+				# 	smock = 0
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
@@ -402,20 +412,12 @@ class SpecsSale(models.Model):
 				if rec.specs_newdec:
 					pas_cur = self.env['railing'].search([('name', '=', 'Handrail C o CR')])
 					pass_cur = rec.specs_newdec * pas_cur.price 
-				else:	
-					tramo_recto = 0.00
-					tramo_inclinado = 0.00
-					curvo_nivel = 0.00
-					curvo_inclin = 0.00
-					pass_rec_inc = 0.00
-					pass_cur = 0.00
-			else:
-				continue
 			total_railing = tramo_recto + tramo_inclinado + curvo_nivel + curvo_inclin + pass_rec_inc + pass_cur
 			latch = (rec.specs_latchsup_id.price * rec.specs_cls) + (rec.specs_latchin_id.price * rec.specs_cli)
 			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
 			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
+			_logger.info(family_conf,'1################################################################################333')
    
 	def name_create(self):
 		for rec in self:
