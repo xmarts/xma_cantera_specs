@@ -9,6 +9,7 @@
                     <field name="name"/>
                     <field name="price_sd" widget='monetary'/> 
                     <field name="price_dd" widget='monetary'/> 
+                    <field name="price_bifolds" widget='monetary'/> 
                 </tree>
             </field>
         </record>

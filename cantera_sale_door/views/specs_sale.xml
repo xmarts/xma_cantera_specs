@@ -71,10 +71,10 @@
                                     </group>
                                 </group>
                                 <group>
-                                    <group string="Frame">
+                                    <group string="Frame" attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                         <field name="specs_ancmarc" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_profmarc" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
-                                        <field name="specs_anchor_id"/>
+                                        <field name="specs_anchor_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_hinges_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_amount_hinges" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                     </group>
@@ -109,7 +109,7 @@
                                     </group>
                                 </group>
                                 <group>
-                                    <group string='Transom'>
+                                    <group string='Transom' attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                         <field name="specs_tyarct_id"/>
                                         <field name="specs_altarct"/>
                                         <field name="specs_antra"/>
@@ -119,7 +119,7 @@
                                         <field name="specs_anpc" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
                                         <field name="railing_id" invisible='1'/>
                                     </group>
-                                    <group string='Sidelight'>
+                                    <group string='Sidelight' attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                         <field name="specs_anfi"/>
                                         <field name="specs_alfi"/>
                                         <field name="specs_board_type_id" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
@@ -127,7 +127,7 @@
                                         <field name="specs_posfi_id"/>
                                     </group>
                                 </group>
-                                <field name="specs_line_ids">
+                                <field name="specs_line_ids" attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                     <tree editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="accessories_id"/>
@@ -135,13 +135,13 @@
                                     </tree>
                                 </field>
                                 <group>
-                                    <group string='Latch'>
+                                    <group string='Latch' attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                         <field name="specs_latchsup_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_cls" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_latchin_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_cli" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                     </group>
-                                    <group string='protections'>
+                                    <group string='protections' attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                         <field name="specs_tolerance" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_typeguar_id" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_flashing_id"/>
@@ -158,7 +158,7 @@
                                 <group>
                                     <field name="description"/>
                                 </group>
-                                <field name="specs_glass_line_ids">
+                                <field name="specs_glass_line_ids"  attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                     <tree editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="glass_piece_id"/>

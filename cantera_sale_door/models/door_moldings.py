@@ -12,3 +12,6 @@ class DoorMoldingInt(models.Model):
     price_dd = fields.Float(
         string='Precio Doble Door'
     )
+    price_bifolds = fields.Float(
+        string='Precio Bifolds'
+    )

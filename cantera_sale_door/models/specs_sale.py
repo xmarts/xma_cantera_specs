@@ -16,7 +16,7 @@ class SpecsSale(models.Model):
 		[('door', 'Puerta'),
 		('windows', 'Ventana'),
 		('railing', 'Barandal')],
-		string='Tipo de Specs',
+		string='Tipo de Producto',
 		default='door'
 	)
 	specs_sale_id = fields.Many2one(
@@ -101,7 +101,7 @@ class SpecsSale(models.Model):
 	specs_huacal = fields.Selection(
 		[('yes', 'Yes'),
 		('No', 'No')],
-		string='Huecal',
+		string='Huacal',
 	)
 	specs_handing_id = fields.Many2one(
 		'door.handing',
@@ -190,15 +190,15 @@ class SpecsSale(models.Model):
 	)
 	specs_jin_id = fields.Many2one(
 		'door.pull.handles',
-		string='Jaladera Intiva Exterior'
+		string='Jaladera Inactiva Exterior'
 	)
 	specs_jinin_id = fields.Many2one(
 		'door.pull.handles',
-		string='Jaladera Intiva Interior'
+		string='Jaladera Inactiva Interior'
 	)
 	specs_pch_id = fields.Many2one(
 		'door.metal',
-		string='Preparacion de Chapa'
+		string='Preparación de Chapa'
 	)
 	specs_moce_id = fields.Many2one(
 		'door.lock',
@@ -269,7 +269,7 @@ class SpecsSale(models.Model):
     )
 	specs_posfi_id = fields.Many2one(
 		'door.position',
-		string='Posicion del Fijo'
+		string='Posición del Fijo'
 	)
 	specs_line_ids = fields.One2many(
 		'door.accessories',
@@ -375,15 +375,17 @@ class SpecsSale(models.Model):
 			rec.specs_mtrs = total
 			price_family = rec.specs_product_id.price * total
 			if rec.specs_type == 'door' or rec.specs_type == 'windows':
-				if str(rec.specs_dc_id.name)[:2] == 'SD':
+				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
 					flashing = rec.specs_flashing_id.price_sd
 					smock = rec.specs_typeguar_id.price_sd
-				if str(rec.specs_dc_id.name)[:2] == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
-					flashing = rec.specs_flashing_id.price_dd
-				if str(rec.specs_dc_id.name)[:2] == 'DD':
+				if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
+					flashing = rec.specs_flashing_id.price_bifolds
+				if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
+					smock = rec.specs_typeguar_id.price_bifolds
+				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					flashing = rec.specs_flashing_id.price_dd
 					smock = rec.specs_typeguar_id.price_dd
-				if str(rec.specs_dc_id.name)[:2] == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
 						configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
