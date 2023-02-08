@@ -24,7 +24,7 @@
                             <page string="Cotizador">
                                 <group string="Header">
                                     <group>
-                                        <field name="specs_sale_id"/>
+                                        <field name="specs_sale_id" required='1' readonly="context.get('default_specs_sale_id')"/>
                                         <field name="specs_leads_id"/>
                                         <field name="specs_product_id"/>
                                         <field name="specs_dc_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
@@ -189,6 +189,7 @@
             <field name="arch" type="xml">
                 <tree string="Specs">
                     <field name="specs_type"/>
+                    <field name="opportunity_specs"/>
                     <field name="specs_sale_id"/>
                     <field name="specs_leads_id"/>
                 </tree>

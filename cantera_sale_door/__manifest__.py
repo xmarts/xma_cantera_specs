@@ -23,6 +23,7 @@
                 'sale_management',
                 'sale',
                 'crm',
+                'sale_crm',
                 'product',
                 'mail',
             ],
@@ -66,6 +67,7 @@
         'views/door_glass_specs_views.xml',
         'views/door_family_views.xml',
         'views/railing_views.xml',
+        'views/sale_order_views.xml',
         'report/report_cantera_specs.xml'
     ],
     # only loaded in demonstration mode

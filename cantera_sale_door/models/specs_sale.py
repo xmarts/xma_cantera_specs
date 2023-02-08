@@ -347,6 +347,10 @@ class SpecsSale(models.Model):
 		'railing',
 		string='Railing'
 	)
+	opportunity_specs = fields.Many2one(
+		string='Lead/Oportunidad',
+		related='specs_sale_id.opportunity_id'
+	)
  
 	@api.constrains(
 		'specs_ant', 'specs_alt','specs_product_id','specs_dc_id','specs_molding_ext_id',
