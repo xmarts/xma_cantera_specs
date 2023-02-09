@@ -10,5 +10,5 @@ class DoorSmock(models.Model):
         string='Precio Single Door'
     )
     price_dd = fields.Float(
-        string='Precio Doble Door'
+        string='Precio Double Door'
     )

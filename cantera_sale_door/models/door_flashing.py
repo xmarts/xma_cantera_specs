@@ -10,7 +10,7 @@ class DoorFlashing(models.Model):
         string='Precio Single Door'
     )
     price_dd = fields.Float(
-        string='Precio Doble Door'
+        string='Precio Double Door'
     )
     price_bifolds = fields.Float(
         string='Precio Bifolds'
