@@ -17,7 +17,6 @@ access_door_traslape,door.traslape,model_door_traslape,,1,1,1,1
 access_door_metal,door.metal,model_door_metal,,1,1,1,1
 access_door_lock,door.lock,model_door_lock,,1,1,1,1
 access_door_pull_handels,door.pull.handels,model_door_pull_handles,,1,1,1,1
-access_door_type_arct,door.type.arct,model_door_type_arct,,1,1,1,1
 access_door_board_type,door.board.type,model_door_board_type,,1,1,1,1
 access_door_position,door.position,model_door_position,,1,1,1,1
 access_door_accessories_list,door.accessories.list,model_door_accessories_list,,1,1,1,1

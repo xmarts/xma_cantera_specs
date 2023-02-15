@@ -19,7 +19,6 @@ from . import door_traslape
 from . import door_metal
 from . import door_lock
 from . import door_pull_handles
-from . import door_type_arct
 from . import door_board_type
 from . import door_position
 from . import door_accessories_list

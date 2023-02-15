@@ -105,7 +105,7 @@ class SpecsSale(models.Model):
 	)
 	specs_handing_id = fields.Many2one(
 		'door.handing',
-		string='Tablero'
+		string='Handing'
 	)
 	specs_forging_id = fields.Many2one(
 		'door.forging',
@@ -145,6 +145,19 @@ class SpecsSale(models.Model):
 		'door.type.glass',
 		string='Tipo de Vidrio'
 	)
+	specs_glassf = fields.Selection(
+		[('yes', 'Yes'),
+		('No', 'No')],
+		string='Vidrio Fijo en Fijos',
+	)
+	specs_typef_glass_id = fields.Many2one(
+		'door.type.glass',
+		string='Tipo de Vidrio en Fijos'
+	)
+	specs_typet_glass_id = fields.Many2one(
+		'door.type.glass',
+		string='Tipo de Vidrio'
+	)
 	specs_ancmarc = fields.Float(
     	string='Ancho de Marco',
      	digits=(12, 4)
@@ -174,7 +187,7 @@ class SpecsSale(models.Model):
 	)
 	specs_traslape_int_id = fields.Many2one(
 		'door.traslape',
-		string='Traslape Externa'
+		string='Traslape Interna'
 	)
 	specs_traslape_ext_id = fields.Many2one(
 		'door.traslape',
@@ -223,7 +236,7 @@ class SpecsSale(models.Model):
     	string='Ball Catch'
     )
 	specs_tyarct_id = fields.Many2one(
-		'door.type.arct',
+		'door.type.arc',
 		string='Tipo de Arco en Transom'
 	)
 	specs_altarct = fields.Float(
@@ -242,6 +255,11 @@ class SpecsSale(models.Model):
 		[('yes', 'Yes'),
 		('no', 'No')],
 		string='Doble Marco',
+	)
+	specs_ddmf = fields.Selection(
+		[('yes', 'Yes'),
+		('no', 'No')],
+		string='Doble Marco de Fijos',
 	)
 	specs_altpc = fields.Float(
     	string='Altura Panel Central',
@@ -364,6 +382,7 @@ class SpecsSale(models.Model):
 		for rec in self:
 			ant = rec.specs_ant * 0.0254
 			alt = rec.specs_alt * 0.0254
+			total = ant * alt
 			configuration = 0.00
 			flashing = 0.00
 			smock = 0.00
@@ -375,10 +394,9 @@ class SpecsSale(models.Model):
 			curvo_inclin = 0.00
 			pass_rec_inc = 0.00
 			pass_cur = 0.00
-			total = ant * alt
-			rec.specs_mtrs = total
-			price_family = rec.specs_product_id.price * total
 			if rec.specs_type == 'door' or rec.specs_type == 'windows':
+				rec.specs_mtrs = total
+				price_family = rec.specs_product_id.price * total
 				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
 					flashing = rec.specs_flashing_id.price_sd
 					smock = rec.specs_typeguar_id.price_sd

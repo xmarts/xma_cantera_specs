@@ -50,7 +50,6 @@
         'views/door_metal_views.xml',
         'views/door_lock_views.xml',
         'views/door_pull_handles_views.xml',
-        'views/door_type_arct_views.xml',
         'views/door_board_type_views.xml',
         'views/door_position_views.xml',
         'views/door_accessories_list_views.xml',
