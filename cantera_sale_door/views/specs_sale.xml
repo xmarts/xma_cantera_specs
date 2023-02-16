@@ -109,7 +109,7 @@
                                     </group>
                                 </group>
                                 <group>
-                                    <group string='Transom' attrs="{'invisible': [('specs_type', '=', 'railing')]}">
+                                    <group string='Transom' attrs="{'invisible': ['|', ('specs_type', '=', 'railing'), ('specs_type', '=', 'windows')]}">
                                         <field name="specs_tyarct_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_typet_glass_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_altarct"  attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
