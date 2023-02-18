@@ -441,7 +441,7 @@ class SpecsSale(models.Model):
 			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
 			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
-			_logger.info(family_conf,'1################################################################################333')
+			
    
 	def name_create(self):
 		for rec in self:
@@ -456,19 +456,23 @@ class SpecsSale(models.Model):
 			if rec.specs_type:
 				rec.name_specs=nombre
 	
-	@api.onchange('specs_type')
-	def _domain_specs_dc_id(self):
-		if self.specs_type:
-			class_obj =self.env['door.configuration'].search([('name','=','Fixed'),('name','=','Casement'),('name','=','Awning')])
-			ids_list = [] 
-			for rec in class_obj:
-				if rec.specs_type == 'windows':
-					ids_list.append(rec.id)
-				if rec.specs_type == 'door':
-					ids_list.remove(rec.id)
-			res = {}
-			res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
-			return res
-		else:
-			res = {}
-			res['domain'] = {'specs_dc_id': []}
+	# @api.onchange('specs_type')
+	# def _domain_specs_dc_id(self):
+	# 	if self.specs_type:
+	# 		win_obj =self.env['door.configuration'].search([('name','=','Fixed'),('name','=','Casement'),('name','=','Awning')])
+	# 		door_obj =self.env['door.configuration'].search([])
+	# 		_logger.info(win_obj,'1################################################################################333')
+	# 		ids_list = [] 
+	# 		for rec in win_obj:
+	# 			if rec.specs_type == 'windows':
+	# 				ids_list.append(rec.id)
+	# 		for l in door_obj:
+	# 			if rec.specs_type == 'door':
+	# 				ids_list.append(l.id)
+	# 				ids_list.remove(rec.id)
+	# 		res = {}
+	# 		res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
+	# 		return res
+	# 	else:
+	# 		res = {}
+	# 		res['domain'] = {'specs_dc_id': []}
