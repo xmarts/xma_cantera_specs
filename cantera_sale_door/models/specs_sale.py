@@ -456,23 +456,22 @@ class SpecsSale(models.Model):
 			if rec.specs_type:
 				rec.name_specs=nombre
 	
-	# @api.onchange('specs_type')
-	# def _domain_specs_dc_id(self):
-	# 	if self.specs_type:
-	# 		win_obj =self.env['door.configuration'].search([('name','=','Fixed'),('name','=','Casement'),('name','=','Awning')])
-	# 		door_obj =self.env['door.configuration'].search([])
-	# 		_logger.info(win_obj,'1################################################################################333')
-	# 		ids_list = [] 
-	# 		for rec in win_obj:
-	# 			if rec.specs_type == 'windows':
-	# 				ids_list.append(rec.id)
-	# 		for l in door_obj:
-	# 			if rec.specs_type == 'door':
-	# 				ids_list.append(l.id)
-	# 				ids_list.remove(rec.id)
-	# 		res = {}
-	# 		res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
-	# 		return res
-	# 	else:
-	# 		res = {}
-	# 		res['domain'] = {'specs_dc_id': []}
+	@api.onchange('specs_type')
+	def _domain_specs_dc_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['door.configuration'].search([])
+				ids_list = []
+				for w in door_obj:
+					if rec.specs_type == 'windows':
+						if w.name == 'Fixed' or w.name == 'Casement' or w.name == 'Awning':
+							ids_list.append(w.id)
+					else:
+						if w.name != 'Fixed' and w.name != 'Casement' and w.name != 'Awning':
+							ids_list.append(w.id)
+				res = {}
+				res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_dc_id': []}
