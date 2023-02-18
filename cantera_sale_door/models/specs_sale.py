@@ -17,7 +17,6 @@ class SpecsSale(models.Model):
 		('windows', 'Ventana'),
 		('railing', 'Barandal')],
 		string='Tipo de Producto',
-		default='door'
 	)
 	specs_sale_id = fields.Many2one(
 		'sale.order',
@@ -168,7 +167,7 @@ class SpecsSale(models.Model):
     )
 	specs_anchor_id = fields.Many2one(
 		'door.anchor',
-		string='Ancla'
+		string='Anclas'
 	)
 	specs_hinges_id = fields.Many2one(
 		'door.hinges',
@@ -282,7 +281,7 @@ class SpecsSale(models.Model):
 		string='Tipo de Tablero de Fijos'
 	)
 	specs_altboard_type = fields.Float(
-    	string='Altura de Tablero de Fijoss',
+    	string='Altura de Tablero de Fijos',
      	digits=(12, 4)
     )
 	specs_posfi_id = fields.Many2one(
@@ -394,6 +393,7 @@ class SpecsSale(models.Model):
 			curvo_inclin = 0.00
 			pass_rec_inc = 0.00
 			pass_cur = 0.00
+			price_family = 0.00
 			if rec.specs_type == 'door' or rec.specs_type == 'windows':
 				rec.specs_mtrs = total
 				price_family = rec.specs_product_id.price * total
@@ -456,3 +456,19 @@ class SpecsSale(models.Model):
 			if rec.specs_type:
 				rec.name_specs=nombre
 	
+	@api.onchange('specs_type')
+	def _domain_specs_dc_id(self):
+		if self.specs_type:
+			class_obj =self.env['door.configuration'].search([('name','=','Fixed'),('name','=','Casement'),('name','=','Awning')])
+			ids_list = [] 
+			for rec in class_obj:
+				if rec.specs_type == 'windows':
+					ids_list.append(rec.id)
+				if rec.specs_type == 'door':
+					ids_list.remove(rec.id)
+			res = {}
+			res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
+			return res
+		else:
+			res = {}
+			res['domain'] = {'specs_dc_id': []}

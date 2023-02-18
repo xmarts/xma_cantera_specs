@@ -61,7 +61,7 @@
                                     <group>
                                         <field name="specs_forging_id"/>
                                         <field name="specs_operable" attrs="{'invisible': [('specs_type', '!=', 'door')]}"/>
-                                        <field name="specs_type_arc_id" attrs="{'invisible': [('specs_type', '!=', 'door')]}"/>
+                                        <field name="specs_type_arc_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_altarc" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_tolsup" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_tolcen" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
@@ -111,13 +111,13 @@
                                 <group>
                                     <group string='Transom' attrs="{'invisible': ['|', ('specs_type', '=', 'railing'), ('specs_type', '=', 'windows')]}">
                                         <field name="specs_tyarct_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
-                                        <field name="specs_typet_glass_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="specs_altarct"  attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_antra" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_altra" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_ddm" attrs="{'invisible': [('specs_type', '=', 'windows')]}"/>
                                         <field name="specs_altpc" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
                                         <field name="specs_anpc" attrs="{'invisible': [('specs_type', '!=', 'windows')]}"/>
+                                        <field name="specs_typet_glass_id" attrs="{'invisible': [('specs_type', '=', 'railing')]}"/>
                                         <field name="railing_id" invisible='1'/>   
                                     </group>
                                     <group string='Sidelight' attrs="{'invisible': ['|', ('specs_type', '=', 'railing'), ('specs_type', '=', 'windows')]}">
@@ -125,10 +125,10 @@
                                         <field name="specs_alfi"/>
                                         <field name="specs_board_type_id"/>
                                         <field name="specs_altboard_type"/>
-                                        <field name="specs_posfi_id"/>
-                                        <field name="specs_ddmf"/>
                                         <field name="specs_glassf"/>
                                         <field name="specs_typef_glass_id"/>
+                                        <field name="specs_ddmf"/>
+                                        <field name="specs_posfi_id"/>
                                     </group>
                                 </group>
                                 <field name="specs_line_ids">
