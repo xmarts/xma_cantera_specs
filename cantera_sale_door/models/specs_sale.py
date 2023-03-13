@@ -402,14 +402,14 @@ class SpecsSale(models.Model):
 	)
  
 	
-	def _change_state(self):
-		for rec in self:
-			if rec.stage_id == self.env.ref("cantera_sale_door.stage_in_progress"):
-				rec.state = 'errase'
-			if rec.stage_id == self.env.ref("cantera_sale_door.stage_planned"):
-				rec.state = 'price'
-			if rec.stage_id == self.env.ref("cantera_sale_door.stage_finish"):
-				rec.state = 'bom'
+	# def _change_state(self):
+	# 	for rec in self:
+	# 		if rec.stage_id == self.env.ref("cantera_sale_door.stage_in_progress"):
+	# 			rec.state = 'errase'
+	# 		if rec.stage_id == self.env.ref("cantera_sale_door.stage_planned"):
+	# 			rec.state = 'price'
+	# 		if rec.stage_id == self.env.ref("cantera_sale_door.stage_finish"):
+	# 			rec.state = 'bom'
 			
  
 	@api.onchange('specs_type')
