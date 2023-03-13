@@ -18,8 +18,8 @@
             <field name="view_mode">tree</field>
         </record>
 
-        
-        <menuitem id="door_handing_sub_menu" name="Handing" action="action_door_handing" parent="cantera_sale_door.general_indicator" sequence="3"/>
+        <menuitem id="general_indicator" name="General" parent="offering_menu" sequence="2"/>
+        <menuitem id="door_handing_sub_menu" name="Handing" action="action_door_handing" parent="cantera_sale_door.general_indicator" sequence="1"/>
 
   </data>
 </odoo>

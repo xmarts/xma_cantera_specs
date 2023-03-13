@@ -18,7 +18,8 @@
             <field name="view_mode">tree</field>
         </record>
 
-        <menuitem id="door_assembly_sub_menu" name="Preparación de Ensamble" action="action_door_assembly" parent="cantera_sale_door.protections_indicator" sequence="3"/>
+        <menuitem id="protections_indicator" name="proteciones" parent="offering_menu" sequence="10"/>
+            <menuitem id="door_assembly_sub_menu" name="Preparación de Ensamble" action="action_door_assembly" parent="cantera_sale_door.protections_indicator" sequence="3"/>
 
   </data>
 </odoo>

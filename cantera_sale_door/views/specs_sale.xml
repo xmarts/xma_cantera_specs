@@ -5,11 +5,25 @@
             <field name="model">specs.sale</field>
             <field name="arch" type="xml">
                 <form string="specs">
+                    <header>
+                        <button name="save_total_specs" string="Confirmar Cotizacion" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'errase')]}"/>
+                        <button name="create_materials_bills" string="Crear Lista de Materiales" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'price')]}"/>
+                        <button name="state_cancel" string="Cancelar" type="object" class="btn-secondary" attrs="{'invisible': [('state', '!=', 'bom')]}"/>
+                        <field name="stage_id" widget="statusbar" readonly='1'/>
+                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="mrp_call_view" type="object" class="oe_stat_button" icon="fa-list-ul">
+                                <field string="Lista de Materiales" name="mrp_count" widget="statinfo"/>
+                            </button>
+                        </div>
                         <group>
                             <group>
+                                <field name="state" invisible='1'/>
                                 <field name="specs_type" required='1'/>
+                                <field name="product_id" required='1'/>
                                 <field name="name_specs" invisible='1'/>
+                                <field name="campo_o2m_ids" invisible='1'/>
                             </group>
                             <group>
                                 <group>
@@ -196,6 +210,7 @@
                     <field name="opportunity_specs"/>
                     <field name="specs_sale_id"/>
                     <field name="specs_leads_id"/>
+                    <field name="state" widget="badge" decoration-success="state == 'bom'" decoration-info="state == 'price'"/>
                 </tree>
             </field>
         </record>

@@ -12,6 +12,21 @@ class SpecsSale(models.Model):
 	_rec_name = 'name_specs'
 
 
+	stage_id = fields.Many2one(
+        'specs.type',
+        string='Etapa',
+        group_expand='_read_group_stage_ids',
+        default=lambda self: self._select_state()
+    )
+	state = fields.Selection(
+		selection=[
+            ('errase', 'Borrador'),
+            ('price', 'Precio Actualizado'),
+            ('bom', 'Bom Creado'),
+        ],
+        string="Estado", readonly=True,
+        compute='_change_state'
+	)
 	specs_type = fields.Selection(
 		[('door', 'Puerta'),
 		('windows', 'Ventana'),
@@ -89,10 +104,6 @@ class SpecsSale(models.Model):
     	string='Altura de la Hoja',
      	digits=(12, 4)
     )
-	specs_board_id = fields.Many2one(
-		'door.board',
-		string='Tablero'
-	)
 	specs_altboard = fields.Float(
     	string='Altura de Tablero',
      	digits=(12, 4)
@@ -105,10 +116,6 @@ class SpecsSale(models.Model):
 	specs_handing_id = fields.Many2one(
 		'door.handing',
 		string='Handing'
-	)
-	specs_forging_id = fields.Many2one(
-		'door.forging',
-		string='Forja'
 	)
 	specs_operable = fields.Selection(
 		[('yes', 'Yes'),
@@ -165,14 +172,6 @@ class SpecsSale(models.Model):
     	string='Profundidad de Marco',
      	digits=(12, 4)
     )
-	specs_anchor_id = fields.Many2one(
-		'door.anchor',
-		string='Anclas'
-	)
-	specs_hinges_id = fields.Many2one(
-		'door.hinges',
-		string='Bisagras'
-	)
 	specs_amount_hinges = fields.Integer(
     	string='Cantidad de Bisagras'
     )
@@ -192,29 +191,9 @@ class SpecsSale(models.Model):
 		'door.traslape',
 		string='Traslape Externa'
 	)
-	specs_jac_id = fields.Many2one(
-		'door.pull.handles',
-		string='Jaladera Activa Exterior'
-	)
-	specs_jacin_id = fields.Many2one(
-		'door.pull.handles',
-		string='Jaladera Activa Interior'
-	)
-	specs_jin_id = fields.Many2one(
-		'door.pull.handles',
-		string='Jaladera Inactiva Exterior'
-	)
-	specs_jinin_id = fields.Many2one(
-		'door.pull.handles',
-		string='Jaladera Inactiva Interior'
-	)
 	specs_pch_id = fields.Many2one(
 		'door.metal',
 		string='Preparación de Chapa'
-	)
-	specs_moce_id = fields.Many2one(
-		'door.lock',
-		string='Modelo de Cerradura'
 	)
 	specs_altce = fields.Float(
     	string='Altura de Cerradura',
@@ -292,26 +271,10 @@ class SpecsSale(models.Model):
 		'door.accessories',
 		'acc_id'
 	)
-	specs_latchsup_id = fields.Many2one(
-		'door.latch',
-		string='Picaporte Superior'
-	)
-	specs_latchin_id = fields.Many2one(
-		'door.latch',
-		string='Picaporte Inferior'
-	)
 	specs_tolerance = fields.Float(
     	string='Tolerancia Guardapolvo',
      	digits=(12, 4)
     )
-	specs_typeguar_id = fields.Many2one(
-		'door.smock',
-		string='Tipo de Guardapolvo'
-	)
-	specs_flashing_id = fields.Many2one(
-		'door.flashing',
-		string='Tipo de Flashing'
-	)
 	specs_assembly_id = fields.Many2one(
 		'door.assembly',
 		string='Preparación de Ensamble'
@@ -368,7 +331,303 @@ class SpecsSale(models.Model):
 		string='Lead/Oportunidad',
 		related='specs_sale_id.opportunity_id'
 	)
+	
+	campo_o2m_ids = fields.One2many(
+        'mrp.bom',
+        'specs_id', 
+        string='specs'
+    )
+	mrp_count = fields.Integer(
+		string='Total mrp',
+		compute='_count_mrp'	
+	)
+ #####################################################
+	specs_board_id = fields.Many2one(
+		'product.attribute.value',
+		string='Tablero'
+	)
+	specs_forging_id = fields.Many2one(
+		'product.attribute.value',
+		string='Forja',
+	)
+	specs_anchor_id = fields.Many2one(
+		'product.attribute.value',
+		string='Anclas',
+	)
+	specs_hinges_id = fields.Many2one(
+		'product.attribute.value',
+		string='Bisagras',
+	)
+	specs_jac_id = fields.Many2one(
+		'product.attribute.value',
+		string='Jaladera Activa Exterior',
+	)
+	specs_jacin_id = fields.Many2one(
+		'product.attribute.value',
+		string='Jaladera Activa Interior',
+	)
+	specs_jin_id = fields.Many2one(
+		'product.attribute.value',
+		string='Jaladera Inactiva Exterior',
+	)
+  
+	specs_jinin_id = fields.Many2one(
+		'product.attribute.value',
+		string='Jaladera Inactiva Interior',
+	)
+	specs_moce_id = fields.Many2one(
+		'product.attribute.value',
+		string='Modelo de Cerradura',
+	)
+	specs_typeguar_id = fields.Many2one(
+		'product.attribute.value',
+		string='Tipo de Guardapolvo',
+	)
+ #####################################################
+	specs_flashing_id = fields.Many2one(
+		'product.attribute.value',
+		string='Tipo de Flashing',
+	)
+	specs_latchsup_id = fields.Many2one(
+		'product.attribute.value',
+		string='Picaporte Superior',
+	)
+	specs_latchin_id = fields.Many2one(
+		'product.attribute.value',
+		string='Picaporte Inferior',
+	)
+	product_id = fields.Many2one(
+		'product.product',
+		string='producto'
+	)
  
+	
+	def _change_state(self):
+		for rec in self:
+			if rec.stage_id == self.env.ref("cantera_sale_door.stage_in_progress"):
+				rec.state = 'errase'
+			if rec.stage_id == self.env.ref("cantera_sale_door.stage_planned"):
+				rec.state = 'price'
+			if rec.stage_id == self.env.ref("cantera_sale_door.stage_finish"):
+				rec.state = 'bom'
+			
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_latchin_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Picaporte')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_latchin_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_latchin_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_latchsup_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Picaporte')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_latchsup_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_latchsup_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_flashing_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Flashing')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_flashing_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_flashing_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_typeguar_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Guardapolvos')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_typeguar_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_typeguar_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_moce_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','CERRADURA')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_moce_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_moce_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_jinin_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_jinin_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_jinin_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_jin_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_jin_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_jin_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_jacin_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_jacin_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_jacin_id': []}
+    
+	@api.onchange('specs_type')
+	def _domain_specs_board_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','TABLERO')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_board_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_board_id': []}
+	
+	@api.onchange('specs_type')
+	def _domain_specs_forgin_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','FORJA')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_forging_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_forging_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_anchor_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','ANCLAS')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_anchor_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_anchor_id': []}
+    
+	@api.onchange('specs_type')
+	def _domain_specs_hinges_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Bisagra')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_hinges_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_hinges_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_jac_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_jac_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_jac_id': []}
+
+	@api.depends('campo_o2m_ids.specs_id')
+	def _count_mrp(self):
+		for record in self:
+			score = self.env['mrp.bom'].search([
+				('specs_id', '=', record.id)
+			])
+			record.mrp_count = len(score)
+
+	def mrp_call_view(self):
+		return {
+			"name": 'Lista de Materiales',
+			"view_mode": 'tree,form',
+			"res_model": 'mrp.bom',
+			"type": 'ir.actions.act_window',
+			"target": 'current',
+			"domain": [
+				('specs_id', '=', self.id)
+			],
+			"context": {'default_specs_id': self.id}
+		}
+	
 	@api.constrains(
 		'specs_ant', 'specs_alt','specs_product_id','specs_dc_id','specs_molding_ext_id',
 		'specs_molding_int_id','specs_flashing_id','specs_typeguar_id','specs_latchsup_id',
@@ -397,26 +656,28 @@ class SpecsSale(models.Model):
 			if rec.specs_type == 'door' or rec.specs_type == 'windows':
 				rec.specs_mtrs = total
 				price_family = rec.specs_product_id.price * total
-				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
-					flashing = rec.specs_flashing_id.price_sd
-					smock = rec.specs_typeguar_id.price_sd
-				if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
-					flashing = rec.specs_flashing_id.price_bifolds
-				if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
-					smock = rec.specs_typeguar_id.price_bifolds
-				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
-					flashing = rec.specs_flashing_id.price_dd
-					smock = rec.specs_typeguar_id.price_dd
+				for flash in rec.specs_flashing_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_flashing_id.name == flash.name:
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+							flashing = flash.price_sd
+						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
+							flashing = flash.price_dd
+						if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
+							flashing = flash.price_bifolds
+				for sm in rec.specs_typeguar_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_typeguar_id.name == sm.name:
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+							smock = sm.price_sd
+						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
+							smock = sm.price_dd
+						if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
+							smock = sm.price_bifolds
 				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
 						configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
 						configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
-				# else:
-				# 	configuration = 0
-				# 	flashing = 0
-				# 	smock = 0
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
@@ -437,12 +698,101 @@ class SpecsSale(models.Model):
 					pas_cur = self.env['railing'].search([('name', '=', 'Handrail C o CR')])
 					pass_cur = rec.specs_newdec * pas_cur.price 
 			total_railing = tramo_recto + tramo_inclinado + curvo_nivel + curvo_inclin + pass_rec_inc + pass_cur
-			latch = (rec.specs_latchsup_id.price * rec.specs_cls) + (rec.specs_latchin_id.price * rec.specs_cli)
-			handled = rec.specs_jac_id.price + rec.specs_jacin_id.price + rec.specs_jin_id.price + rec.specs_jinin_id.price
+			latch_sup = 0.00
+			for lt in rec.specs_latchsup_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_latchsup_id.name == lt.name:
+						latch_sup = lt.price_unique
+			latch_in = 0.00
+			for lti in rec.specs_latchin_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_latchin_id.name == lti.name:
+						latch_in = lti.price_unique
+			latch = (latch_sup * rec.specs_cls) + (latch_in * rec.specs_cli)
+			jac_ex = 0.00
+			jac_in = 0.00
+			jin_ex = 0.00
+			jin_in = 0.00
+			for jac in rec.specs_jac_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_jac_id.name == jac.name:
+						jac_ex = jac.price_unique
+			for jacin in rec.specs_jacin_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_jacin_id.name == jacin.name:
+						jac_in = jacin.price_unique
+			for jin in rec.specs_jin_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_jacin_id.name == jin.name:
+						jin_ex = jin.price_unique
+			for jinin in rec.specs_jinin_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_jinin_id.name == jinin.name:
+						jin_in = jinin.price_unique
+			handled = jac_ex + jac_in + jin_ex + jin_in
 			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
-			
+      
+	def save_total_specs(self):
+		for rec in self:
+			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			self.env['sale.order.line'].create(
+				{
+					'order_id': rec.specs_sale_id.id,
+					'product_id': rec.product_id.id,
+					'price_unit': rec.specs_amount_total,
+					'name': rec.name_specs,
+					'product_uom': unit.id,
+					'product_uom_qty': 1.00,
+				}
+			)
+			rec.stage_id = self.env.ref("cantera_sale_door.stage_planned", raise_if_not_found=False)
    
+   
+	def prueba_a_ver(self, campo):
+		for product in campo.pav_attribute_line_ids.product_template_value_ids.ptav_product_variant_ids.product_template_variant_value_ids:
+			if campo.name == product.name:
+				for prod_bo in self.env['product.product'].search([]):
+					if product.name == prod_bo.product_template_variant_value_ids.ptav_product_variant_ids.product_template_variant_value_ids.name:
+						return prod_bo.id
+           
+	def create_materials_bills(self):
+		materials = []
+		for rec in self:
+			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			lista = [
+				rec.specs_board_id,
+				rec.specs_forging_id,
+				rec.specs_anchor_id,
+				rec.specs_hinges_id,
+				rec.specs_jac_id,
+				rec.specs_jacin_id,
+				rec.specs_jin_id,
+				rec.specs_jinin_id,
+				rec.specs_moce_id,
+				rec.specs_typeguar_id,
+				rec.specs_flashing_id,
+				rec.specs_latchsup_id,
+				rec.specs_latchin_id
+			]
+			for product in lista:
+				if product:
+					materials.append(rec.prueba_a_ver(product))
+			for l in self.env['sale.order.line'].search([('order_id', '=', rec.specs_sale_id.id)]):
+				bills = self.env['mrp.bom'].create(
+					{
+					'product_tmpl_id': l.product_template_id.id,
+					'product_id': l.product_id.id,
+					'product_uom_id': unit.id,
+					'product_qty': 1.00,
+					'specs_id':rec.id
+					}
+				)
+				for m in materials:
+					self.env['mrp.bom.line'].create(
+						{
+							'bom_id': bills.id,
+							'product_id': m,
+							'product_uom_id': unit.id,
+							'product_qty': 1.00,
+						}
+					)
+			rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
+     
 	def name_create(self):
 		for rec in self:
 			rec.name_specs=''
@@ -475,3 +825,16 @@ class SpecsSale(models.Model):
 			else:
 				res = {}
 				res['domain'] = {'specs_dc_id': []}
+    
+	@api.model
+	def _read_group_stage_ids(self, stages, domain, order):
+		return self.env['specs.type'].search([])
+
+	def _select_state(self):
+		state = self.env.ref("cantera_sale_door.stage_in_progress", raise_if_not_found=False)
+		return state if state and state.id else False     
+
+
+	def state_cancel(self):
+		for rec in self:
+			rec.stage_id = self.env.ref("cantera_sale_door.stage_in_progress", raise_if_not_found=False)
