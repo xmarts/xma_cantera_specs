@@ -18,15 +18,15 @@ class SpecsSale(models.Model):
         group_expand='_read_group_stage_ids',
         default=lambda self: self._select_state()
     )
-	state = fields.Selection(
-		selection=[
-            ('errase', 'Borrador'),
-            ('price', 'Precio Actualizado'),
-            ('bom', 'Bom Creado'),
-        ],
-        string="Estado", readonly=True,
-        compute='_change_state'
-	)
+	# state = fields.Selection(
+	# 	selection=[
+    #         ('errase', 'Borrador'),
+    #         ('price', 'Precio Actualizado'),
+    #         ('bom', 'Bom Creado'),
+    #     ],
+    #     string="Estado", readonly=True,
+    #     compute='_change_state'
+	# )
 	specs_type = fields.Selection(
 		[('door', 'Puerta'),
 		('windows', 'Ventana'),
