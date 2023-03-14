@@ -11,9 +11,8 @@ class DoorGlassSpecs(models.Model):
         'door.handing.glass',
         string='Handing Glass'
     )
-    glass_type_id = fields.One2many(
+    glass_type_id = fields.Many2many(
 		'product.template',
-		'attribute_line_ids',
         string='Tipo de Vidrio',
 		domain=[('name', '=', 'Tipo de Vidrio')]
     )

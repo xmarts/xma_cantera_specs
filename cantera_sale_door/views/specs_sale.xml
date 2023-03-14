@@ -169,7 +169,7 @@
                                 <field name="specs_sp_line_ids" attrs="{'invisible': [('specs_type', '=', 'railing')]}">
                                     <tree editable="bottom">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="preparations_id"/>
+                                        <field name="preparations_id" widget='many2many_tags'/>
                                         <field name="amount_preparations"/>
                                     </tree>
                                 </field>
@@ -181,7 +181,7 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="glass_piece_id"/>
                                         <field name="handing_glass_id"/>
-                                        <field name="glass_type_id"/>
+                                        <field name="glass_type_id" widget='many2many_tags'/>
                                         <field name="radius_id"/>
                                         <field name="glass_width"/> 
                                         <field name="glass_height"/> 

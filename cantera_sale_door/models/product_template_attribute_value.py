@@ -11,7 +11,7 @@ class ProductTemplateAttributeValue(models.Model):
         string='Precio Double Door'
     )
     price_bifolds = fields.Float(
-        string='Precio Bifolds'
+        string='Precio Bifolds / Sliding'
     )
     price_unique = fields.Float(
         string='Precio unico',
