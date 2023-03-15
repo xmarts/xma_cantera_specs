@@ -401,6 +401,9 @@ class SpecsSale(models.Model):
 		'product.attribute.value',
 		string='Moldura Externa'
 	)
+	block_changes = fields.Boolean(
+        string='Registro Bloqueado',    
+    )
  
 	@api.onchange('specs_type')
 	def _domain_product_id(self):
@@ -895,7 +898,9 @@ class SpecsSale(models.Model):
 	def state_cancel(self):
 		for rec in self:
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_cancel", raise_if_not_found=False)
+			rec.block_changes = True
    
 	def state_return(self):
 		for rec in self:
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_in_progress", raise_if_not_found=False)
+			rec.block_changes = False
