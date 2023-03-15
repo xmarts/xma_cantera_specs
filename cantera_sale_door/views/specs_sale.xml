@@ -8,7 +8,8 @@
                     <header>
                         <button name="save_total_specs" string="Confirmar Cotizacion" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'errase')]}"/>
                         <button name="create_materials_bills" string="Crear Lista de Materiales" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'price')]}"/>
-                        <button name="state_cancel" string="Cancelar" type="object" class="btn-secondary" attrs="{'invisible': [('state', '!=', 'bom')]}"/>
+                        <button name="state_cancel" string="Cancelar" type="object" class="btn-secondary" attrs="{'invisible': [('state', '=', 'cancel')]}"/>
+                        <button name="state_return" string="Borrador" type="object" class="btn-secondary" attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
                         <field name="stage_id" widget="statusbar" readonly='1'/>
                     </header>
                     <sheet>
@@ -210,7 +211,7 @@
                     <field name="opportunity_specs"/>
                     <field name="specs_sale_id"/>
                     <field name="specs_leads_id"/>
-                    <field name="state" widget="badge" decoration-success="state == 'bom'" decoration-info="state == 'price'"/>
+                    <field name="state" widget="badge" decoration-success="state == 'bom'" decoration-info="state == 'price'" decoration-danger="state == 'cancel'"/>
                 </tree>
             </field>
         </record>

@@ -23,6 +23,7 @@ class SpecsSale(models.Model):
             ('errase', 'Borrador'),
             ('price', 'Precio Actualizado'),
             ('bom', 'Bom Creado'),
+            ('cancel', 'Cancelado')
         ],
         string="Estado", readonly=True,
         compute='_change_state'
@@ -175,14 +176,6 @@ class SpecsSale(models.Model):
 	specs_amount_hinges = fields.Integer(
     	string='Cantidad de Bisagras'
     )
-	specs_molding_int_id = fields.Many2one(
-		'door.molding',
-		string='Moldura Interna'
-	)
-	specs_molding_ext_id = fields.Many2one(
-		'door.molding',
-		string='Moldura Externa'
-	)
 	specs_traslape_int_id = fields.Many2one(
 		'door.traslape',
 		string='Traslape Interna'
@@ -397,9 +390,85 @@ class SpecsSale(models.Model):
 		string='Picaporte Inferior',
 	)
 	product_id = fields.Many2one(
-		'product.product',
+		'product.template',
 		string='producto'
 	)
+	specs_molding_int_id = fields.Many2one(
+		'product.attribute.value',
+		string='Moldura Interna'
+	)
+	specs_molding_ext_id = fields.Many2one(
+		'product.attribute.value',
+		string='Moldura Externa'
+	)
+ 
+	@api.onchange('specs_type')
+	def _domain_product_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([])
+				ids_list = []
+				for w in door_obj:
+					if w.sale_ok == True:
+						ids_list.append(w.id)
+						_logger.info(ids_list,'################################################################################333')
+				res = {}
+				res['domain'] = {'product_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'product_id': []}
+    
+    
+	@api.onchange('specs_type')
+	def _domain_specs_dc_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['door.configuration'].search([])
+				ids_list = []
+				for w in door_obj:
+					if rec.specs_type == 'windows':
+						if w.name == 'Fixed' or w.name == 'Casement' or w.name == 'Awning':
+							ids_list.append(w.id)
+					else:
+						if w.name != 'Fixed' and w.name != 'Casement' and w.name != 'Awning':
+							ids_list.append(w.id)
+				res = {}
+				res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_dc_id': []}
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_molding_ext_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','MOLDURAS')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_molding_ext_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_molding_ext_id': []}
+	
+	@api.onchange('specs_type')
+	def _domain_specs_molding_int_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','MOLDURAS')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_molding_int_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_molding_int_id': []}
  
 	
 	def _change_state(self):
@@ -410,6 +479,8 @@ class SpecsSale(models.Model):
 				rec.state = 'price'
 			if rec.stage_id == self.env.ref("cantera_sale_door.stage_finish"):
 				rec.state = 'bom'
+			if rec.stage_id == self.env.ref("cantera_sale_door.stage_cancel"):
+				rec.state = 'cancel'
 			
  
 	@api.onchange('specs_type')
@@ -663,7 +734,7 @@ class SpecsSale(models.Model):
 						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 							flashing = flash.price_dd
 						if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
-							flashing = flash.price_bifolds
+							flashing = flash.price_unique
 				for sm in rec.specs_typeguar_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_typeguar_id.name == sm.name:
 						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
@@ -672,12 +743,18 @@ class SpecsSale(models.Model):
 							smock = sm.price_dd
 						if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
 							smock = sm.price_bifolds
+				for mol_in in rec.specs_molding_int_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_molding_int_id.name == mol_in.name:
+						mol_in
+				for mol_ex in rec.specs_molding_ext_id.pav_attribute_line_ids.product_template_value_ids:
+					if rec.specs_molding_int_id.name == mol_ex.name:
+						mol_ex
 				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
-						configuration = rec.specs_molding_int_id.price_sd + rec.specs_molding_ext_id.price_sd
+						configuration = mol_in.price_sd + mol_ex.price_sd
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
-						configuration = rec.specs_molding_int_id.price_dd + rec.specs_molding_ext_id.price_dd
+						configuration = mol_in.price_dd + mol_ex.price_dd
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
@@ -805,26 +882,6 @@ class SpecsSale(models.Model):
 			nombre =value+' '+str(rec.specs_dc_id.name)+' '+str(rec.specs_product_id.name)
 			if rec.specs_type:
 				rec.name_specs=nombre
-	
-	@api.onchange('specs_type')
-	def _domain_specs_dc_id(self):
-		for rec in self:
-			if rec.specs_type:
-				door_obj =self.env['door.configuration'].search([])
-				ids_list = []
-				for w in door_obj:
-					if rec.specs_type == 'windows':
-						if w.name == 'Fixed' or w.name == 'Casement' or w.name == 'Awning':
-							ids_list.append(w.id)
-					else:
-						if w.name != 'Fixed' and w.name != 'Casement' and w.name != 'Awning':
-							ids_list.append(w.id)
-				res = {}
-				res['domain'] = {'specs_dc_id': [('id', 'in', ids_list)]}
-				return res
-			else:
-				res = {}
-				res['domain'] = {'specs_dc_id': []}
     
 	@api.model
 	def _read_group_stage_ids(self, stages, domain, order):
@@ -836,5 +893,9 @@ class SpecsSale(models.Model):
 
 
 	def state_cancel(self):
+		for rec in self:
+			rec.stage_id = self.env.ref("cantera_sale_door.stage_cancel", raise_if_not_found=False)
+   
+	def state_return(self):
 		for rec in self:
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_in_progress", raise_if_not_found=False)

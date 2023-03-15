@@ -47,7 +47,7 @@
         'views/door_type_glass_views.xml',
         # 'views/door_anchor_views.xml',
         # 'views/door_hinges_views.xml',
-        'views/door_moldings_views.xml',
+        # 'views/door_moldings_views.xml',
         'views/door_traslape_views.xml',
         'views/door_metal_views.xml',
         #'views/door_lock_views.xml',

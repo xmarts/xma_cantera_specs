@@ -14,7 +14,7 @@ from . import door_type_arc
 from . import door_type_glass
 #from . import door_anchor
 #from . import door_hinges
-from . import door_moldings
+#from . import door_moldings
 from . import door_traslape
 from . import door_metal
 #from . import door_lock

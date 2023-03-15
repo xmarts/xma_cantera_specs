@@ -8,7 +8,6 @@ access_door_suffix,door.suffix,model_door_suffix,,1,1,1,1
 access_door_handing,door.handing,model_door_handing,,1,1,1,1
 access_door_type_arc,door.type.arc,model_door_type_arc,,1,1,1,1
 access_door_type_glass,door.type.glass,model_door_type_glass,,1,1,1,1
-access_door_moldings,door.moldings,model_door_molding,,1,1,1,1
 access_door_traslape,door.traslape,model_door_traslape,,1,1,1,1
 access_door_metal,door.metal,model_door_metal,,1,1,1,1
 access_door_board_type,door.board.type,model_door_board_type,,1,1,1,1

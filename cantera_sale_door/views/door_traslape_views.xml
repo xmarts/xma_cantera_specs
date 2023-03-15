@@ -18,8 +18,8 @@
             <field name="view_mode">tree</field>
         </record>
 
-        
-        <menuitem id="door_traslape_sub_menu" name="Traslape" action="action_door_traslape" parent="cantera_sale_door.frame_brickmolding_indicator" sequence="2"/>
+        <menuitem id="frame_brickmolding_indicator" name="Frame Brickmolding" parent="offering_menu" sequence="4"/>
+            <menuitem id="door_traslape_sub_menu" name="Traslape" action="action_door_traslape" parent="frame_brickmolding_indicator" sequence="1"/>
         
   </data>
 </odoo>
