@@ -390,7 +390,7 @@ class SpecsSale(models.Model):
 		string='Picaporte Inferior',
 	)
 	product_id = fields.Many2one(
-		'product.template',
+		'product.product',
 		string='producto'
 	)
 	specs_molding_int_id = fields.Many2one(
@@ -409,12 +409,11 @@ class SpecsSale(models.Model):
 	def _domain_product_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([])
+				door_obj =self.env['product.product'].search([])
 				ids_list = []
 				for w in door_obj:
 					if w.sale_ok == True:
 						ids_list.append(w.id)
-						_logger.info(ids_list,'################################################################################333')
 				res = {}
 				res['domain'] = {'product_id': [('id', 'in', ids_list)]}
 				return res
@@ -727,37 +726,41 @@ class SpecsSale(models.Model):
 			pass_rec_inc = 0.00
 			pass_cur = 0.00
 			price_family = 0.00
+			# mol_in = 0.00
+			# mol_ex = 0.00
 			if rec.specs_type == 'door' or rec.specs_type == 'windows':
 				rec.specs_mtrs = total
 				price_family = rec.specs_product_id.price * total
 				for flash in rec.specs_flashing_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_flashing_id.name == flash.name:
-						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
 							flashing = flash.price_sd
 						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 							flashing = flash.price_dd
-						if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name)[:2] == "Casement" or str(rec.specs_dc_id.name)[:2] == "Awning":
+						if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name) == "Casement" or str(rec.specs_dc_id.name) == "Awning":
 							flashing = flash.price_unique
 				for sm in rec.specs_typeguar_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_typeguar_id.name == sm.name:
-						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
 							smock = sm.price_sd
 						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 							smock = sm.price_dd
 						if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
 							smock = sm.price_bifolds
+				var_in = []
+				var_ex = []
 				for mol_in in rec.specs_molding_int_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_molding_int_id.name == mol_in.name:
-						mol_in
+						var_in = mol_in
 				for mol_ex in rec.specs_molding_ext_id.pav_attribute_line_ids.product_template_value_ids:
-					if rec.specs_molding_int_id.name == mol_ex.name:
-						mol_ex
-				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name)[:4] == 'SDSL' or str(rec.specs_dc_id.name)[:2] == 'DD' or str(rec.specs_dc_id.name)[:4] == 'DDSL':
+					if rec.specs_molding_ext_id.name == mol_ex.name:
+						var_ex = mol_ex
+				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
-						configuration = mol_in.price_sd + mol_ex.price_sd
+						configuration = var_in.price_sd + var_ex.price_sd
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
-						configuration = mol_in.price_dd + mol_ex.price_dd
+						configuration = var_in.price_dd + var_ex.price_dd
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
@@ -810,6 +813,7 @@ class SpecsSale(models.Model):
 	def save_total_specs(self):
 		for rec in self:
 			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			_logger.info(rec.product_id.id,'################################################################################333')
 			self.env['sale.order.line'].create(
 				{
 					'order_id': rec.specs_sale_id.id,
