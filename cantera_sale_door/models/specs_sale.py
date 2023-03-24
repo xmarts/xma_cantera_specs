@@ -733,17 +733,17 @@ class SpecsSale(models.Model):
 				price_family = rec.specs_product_id.price * total
 				for flash in rec.specs_flashing_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_flashing_id.name == flash.name:
-						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL':
 							flashing = flash.price_sd
-						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
+						if str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 							flashing = flash.price_dd
 						if str(rec.specs_dc_id.name) == "Fixed" or str(rec.specs_dc_id.name) == "Casement" or str(rec.specs_dc_id.name) == "Awning":
 							flashing = flash.price_unique
 				for sm in rec.specs_typeguar_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_typeguar_id.name == sm.name:
-						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
+						if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL':
 							smock = sm.price_sd
-						if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
+						if str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 							smock = sm.price_dd
 						if str(rec.specs_dc_id.name) == "2R" or str(rec.specs_dc_id.name) == "2L" or str(rec.specs_dc_id.name) == "1L2R" or str(rec.specs_dc_id.name) == "1R2L" or str(rec.specs_dc_id.name) == "3R" or str(rec.specs_dc_id.name) == "3L" or str(rec.specs_dc_id.name) == "1L3R" or str(rec.specs_dc_id.name) == "1R3L" or str(rec.specs_dc_id.name) == "2R2L" or str(rec.specs_dc_id.name) == "1L4R" or str(rec.specs_dc_id.name) == "1R4L" or str(rec.specs_dc_id.name) == "4R" or str(rec.specs_dc_id.name) == "4L" or str(rec.specs_dc_id.name) == "2R3L" or str(rec.specs_dc_id.name) == "2L3R":
 							smock = sm.price_bifolds
@@ -757,10 +757,14 @@ class SpecsSale(models.Model):
 						var_ex = mol_ex
 				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
-						configuration = var_in.price_sd + var_ex.price_sd
+						configuration = var_in.price_mol_cua + var_ex.price_mol_cua
+					if str(rec.specs_type_arc_id.name)=='Custom' or str(rec.specs_type_arc_id.name)=='Darla' or str(rec.specs_type_arc_id.name)=='Eliptical' or str(rec.specs_type_arc_id.name)=='Eyebrow' or str(rec.specs_type_arc_id.name)=='Full' or str(rec.specs_type_arc_id.name)=='Gothic' or str(rec.specs_type_arc_id.name)=='Provenzal':
+						configuration = var_in.price_mol_arq + var_ex.price_mol_arq
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL':
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
-						configuration = var_in.price_dd + var_ex.price_dd
+						configuration = var_in.price_mol_arq + var_ex.price_mol_arq
+					if str(rec.specs_tyarct_id.name)=='None' or str(rec.specs_tyarct_id.name)=='Simulated Eyebrow arch':
+						configuration = var_in.price_mol_cua + var_ex.price_mol_cua
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])

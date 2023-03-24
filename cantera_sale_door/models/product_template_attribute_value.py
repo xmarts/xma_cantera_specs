@@ -17,3 +17,9 @@ class ProductTemplateAttributeValue(models.Model):
         string='Precio unico',
         help='Aqui van los precios de las variantes que no tienen relacion con la configuración de productos'
     )
+    price_mol_arq = fields.Float(
+        string='Precio Moldura Arqueada'
+    )
+    price_mol_cua = fields.Float(
+        string='Precio Moldura Cuadrada'
+    )
