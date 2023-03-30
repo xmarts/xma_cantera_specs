@@ -446,7 +446,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_molding_ext_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','MOLDURAS')])
+				door_obj =self.env['product.template'].search([('name','=','Molduras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -461,7 +461,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_molding_int_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','MOLDURAS')])
+				door_obj =self.env['product.template'].search([('name','=','Molduras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -549,7 +549,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_moce_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','CERRADURA')])
+				door_obj =self.env['product.template'].search([('name','=','Cerradura')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -564,7 +564,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_jinin_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				door_obj =self.env['product.template'].search([('name','=','Jaladeras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -579,7 +579,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_jin_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				door_obj =self.env['product.template'].search([('name','=','Jaladeras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -594,7 +594,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_jacin_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				door_obj =self.env['product.template'].search([('name','=','Jaladeras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -609,7 +609,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_board_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','TABLERO')])
+				door_obj =self.env['product.template'].search([('name','=','Tablero')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -624,7 +624,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_forgin_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','FORJA')])
+				door_obj =self.env['product.template'].search([('name','=','Forja')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -639,7 +639,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_anchor_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','ANCLAS')])
+				door_obj =self.env['product.template'].search([('name','=','Anclas')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
@@ -669,7 +669,7 @@ class SpecsSale(models.Model):
 	def _domain_specs_jac_id(self):
 		for rec in self:
 			if rec.specs_type:
-				door_obj =self.env['product.template'].search([('name','=','Pull handles')])
+				door_obj =self.env['product.template'].search([('name','=','Jaladeras')])
 				ids_list = []
 				for w in door_obj:
 					ids_list.extend(w.attribute_line_ids.value_ids.ids)
