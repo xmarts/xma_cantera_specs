@@ -863,6 +863,19 @@ class SpecsSale(models.Model):
 			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
       
+	def name_create(self):
+		for rec in self:
+			rec.name_specs=''
+			if rec.specs_type == 'door':
+				value = 'Puerta'
+			if rec.specs_type == 'windows':
+				value = 'Ventana'
+			if rec.specs_type == 'railing':
+				value = 'Barandal'
+			nombre =value+' '+str(rec.specs_dc_id.name)+' '+str(rec.specs_product_id.name)
+			if rec.specs_type:
+				rec.name_specs=nombre
+    
 	def save_total_specs(self):
 		for rec in self:
 			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
@@ -909,7 +922,10 @@ class SpecsSale(models.Model):
 				rec.specs_molding_int_id,
 				rec.specs_molding_ext_id,
 				rec.specs_sp_line_ids.preparations_ids,
-				rec.specs_glass_line_ids.glass_type_id
+				rec.specs_glass_line_ids.glass_type_id,
+				rec.specs_line_ids.accessories_id,
+				rec.specs_rlat,
+				rec.specs_bac
 			]
 			for product in lista:
 				if product:
@@ -934,19 +950,6 @@ class SpecsSale(models.Model):
 						}
 					)
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
-     
-	def name_create(self):
-		for rec in self:
-			rec.name_specs=''
-			if rec.specs_type == 'door':
-				value = 'Puerta'
-			if rec.specs_type == 'windows':
-				value = 'Ventana'
-			if rec.specs_type == 'railing':
-				value = 'Barandal'
-			nombre =value+' '+str(rec.specs_dc_id.name)+' '+str(rec.specs_product_id.name)
-			if rec.specs_type:
-				rec.name_specs=nombre
     
 	@api.model
 	def _read_group_stage_ids(self, stages, domain, order):
