@@ -4,7 +4,6 @@ from . import specs_sale
 from . import door_configuration
 from . import door_family
 from . import door_design
-from . import door_color
 from . import door_level
 from . import door_suffix
 from . import door_handing

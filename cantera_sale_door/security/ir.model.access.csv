@@ -2,7 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_specs_sale,specs.sale,model_specs_sale,,1,1,1,1
 access_door_configuration,door.configuration,model_door_configuration,,1,1,1,1
 access_door_desing,door.design,model_door_design,,1,1,1,1
-access_door_color,door.color,model_door_color,,1,1,1,1
 access_door_level,door.level,model_door_level,,1,1,1,1
 access_door_suffix,door.suffix,model_door_suffix,,1,1,1,1
 access_door_handing,door.handing,model_door_handing,,1,1,1,1

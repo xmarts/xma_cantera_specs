@@ -37,7 +37,6 @@
         'views/specs_sale.xml',
         'views/door_configuration_views.xml',
         'views/door_design_views.xml',
-        'views/door_color_views.xml',
         'views/door_level_views.xml',
         'views/door_suffix_views.xml',
         'views/door_handing_views.xml',

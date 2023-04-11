@@ -26,6 +26,8 @@
                                 <field name="product_id" required='1' attrs="{'readonly': [('block_changes','!=',False)]}"/>
                                 <field name="name_specs" invisible='1'/>
                                 <field name="campo_o2m_ids" invisible='1'/>
+                                <field name="specs_preparations_ids" invisible='1'/>
+                                <field name="specs_glass_type_id" invisible='1'/>
                             </group>
                             <group>
                                 <group>
@@ -171,8 +173,9 @@
                                 <field name="specs_sp_line_ids" attrs="{'invisible': [('specs_type', '=', 'railing')], 'readonly': [('block_changes','!=',False)]}">
                                     <tree editable="bottom">
                                         <field name="sequence" widget="handle"/>
-                                        <field name="preparations_id" widget='many2many_tags'/>
+                                        <field name="preparations_ids" domain="[('id', 'in', specs_preparations_ids)]" widget='many2many_tags'/>
                                         <field name="amount_preparations"/>
+                                        <field name="specs_preparations_ids" invisible='1'/>
                                     </tree>
                                 </field>
                                 <group>
@@ -183,7 +186,8 @@
                                         <field name="sequence" widget="handle"/>
                                         <field name="glass_piece_id"/>
                                         <field name="handing_glass_id"/>
-                                        <field name="glass_type_id" widget='many2many_tags'/>
+                                        <field name="glass_type_id" domain="[('id', 'in', specs_glass_type_id)]" widget='many2many_tags'/>
+                                        <field name="specs_glass_type_id" invisible='1'/>
                                         <field name="radius_id"/>
                                         <field name="glass_width"/> 
                                         <field name="glass_height"/> 

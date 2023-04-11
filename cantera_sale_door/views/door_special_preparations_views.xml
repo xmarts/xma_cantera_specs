@@ -6,7 +6,7 @@
             <field name="model">door.special.preparations</field>
             <field name="arch" type="xml">
                 <tree editable="bottom" string="Preparaciones Especiales">
-                    <field name="preparations_id"/>
+                    <field name="preparations_ids"/>
                     <field name="amount_preparations"/> 
                     <field name="sequence" invisible='1'/>
                     <field name="prep_id" invisible='1'/>

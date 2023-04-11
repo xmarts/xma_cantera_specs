@@ -57,10 +57,6 @@ class SpecsSale(models.Model):
 		'door.design',
 		string='Diseño'
 	)
-	specs_color_id = fields.Many2one(
-		'door.color',
-		string='Color'
-	)
 	specs_level_id = fields.Many2one(
 		'door.level',
 		string='Nivel de Complejidad'
@@ -272,10 +268,6 @@ class SpecsSale(models.Model):
 		'door.assembly',
 		string='Preparación de Ensamble'
 	)
-	specs_sp_line_ids = fields.One2many(
-		'door.special.preparations',
-		'prep_id'
-	)
 	description = fields.Text(
 		string='Comentarios'
 	)
@@ -404,6 +396,63 @@ class SpecsSale(models.Model):
 	block_changes = fields.Boolean(
         string='Registro Bloqueado',    
     )
+	specs_color_id = fields.Many2one(
+		'product.attribute.value',
+		string='Color'
+	)
+	specs_sp_line_ids = fields.One2many(
+		'door.special.preparations',
+		'prep_id'
+	)
+	specs_preparations_ids = fields.Many2many(
+		comodel_name ='product.attribute.value',
+		relation ='product_attribute_value1_rel',
+        string='Preparaciones Especiales',
+        column1 = 'id1',
+        column2 = 'id2'
+    )
+	specs_glass_type_id = fields.Many2many(
+		comodel_name ='product.attribute.value',
+		relation = 'product_attribute_value2_rel',
+        string='Tipo de Vidrio',
+        column1 = 'id3',
+        column2 = 'id4'
+    )
+ 
+	@api.onchange('specs_type')
+	def _domain_specs_glass_ids(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Vidrios')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				rec.specs_glass_type_id = [(6,0,ids_list)]
+	
+	@api.onchange('specs_type')
+	def _domain_specs_preparation_ids(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Preparaciones Especiales')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				rec.specs_preparations_ids = [(6,0,ids_list)]
+	
+	@api.onchange('specs_type')
+	def _domain_specs_color_id(self):
+		for rec in self:
+			if rec.specs_type:
+				door_obj =self.env['product.template'].search([('name','=','Pintura')])
+				ids_list = []
+				for w in door_obj:
+					ids_list.extend(w.attribute_line_ids.value_ids.ids)
+				res = {}
+				res['domain'] = {'specs_color_id': [('id', 'in', ids_list)]}
+				return res
+			else:
+				res = {}
+				res['domain'] = {'specs_color_id': []}
  
 	@api.onchange('specs_type')
 	def _domain_product_id(self):
@@ -843,6 +892,7 @@ class SpecsSale(models.Model):
 		for rec in self:
 			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
 			lista = [
+				rec.specs_color_id,
 				rec.specs_board_id,
 				rec.specs_forging_id,
 				rec.specs_anchor_id,
@@ -855,7 +905,11 @@ class SpecsSale(models.Model):
 				rec.specs_typeguar_id,
 				rec.specs_flashing_id,
 				rec.specs_latchsup_id,
-				rec.specs_latchin_id
+				rec.specs_latchin_id,
+				rec.specs_molding_int_id,
+				rec.specs_molding_ext_id,
+				rec.specs_sp_line_ids.preparations_ids,
+				rec.specs_glass_line_ids.glass_type_id
 			]
 			for product in lista:
 				if product:
