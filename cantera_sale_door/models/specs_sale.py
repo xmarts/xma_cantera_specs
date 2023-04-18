@@ -960,8 +960,13 @@ class SpecsSale(models.Model):
 
 	def state_cancel(self):
 		for rec in self:
+			for x in rec.specs_sale_id.order_line:
+				x.unlink()
+			for l in self.env['mrp.bom'].search([('specs_id','=', rec.id)]):
+				l.unlink()
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_cancel", raise_if_not_found=False)
 			rec.block_changes = True
+			
    
 	def state_return(self):
 		for rec in self:
