@@ -879,7 +879,6 @@ class SpecsSale(models.Model):
 	def save_total_specs(self):
 		for rec in self:
 			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
-			_logger.info(rec.product_id.id,'################################################################################333')
 			self.env['sale.order.line'].create(
 				{
 					'order_id': rec.specs_sale_id.id,
@@ -893,7 +892,7 @@ class SpecsSale(models.Model):
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_planned", raise_if_not_found=False)
    
    
-	def prueba_a_ver(self, campo):
+	def materials_bills_create(self, campo):
 		for product in campo.pav_attribute_line_ids.product_template_value_ids.ptav_product_variant_ids.product_template_variant_value_ids:
 			if campo.name == product.name:
 				for prod_bo in self.env['product.product'].search([]):
@@ -923,13 +922,12 @@ class SpecsSale(models.Model):
 				rec.specs_molding_ext_id,
 				rec.specs_sp_line_ids.preparations_ids,
 				rec.specs_glass_line_ids.glass_type_id,
-				rec.specs_line_ids.accessories_id,
 				rec.specs_rlat,
 				rec.specs_bac
 			]
 			for product in lista:
 				if product:
-					materials.append(rec.prueba_a_ver(product))
+					materials.append(rec.materials_bills_create(product))
 			for l in self.env['sale.order.line'].search([('order_id', '=', rec.specs_sale_id.id)]):
 				bills = self.env['mrp.bom'].create(
 					{
