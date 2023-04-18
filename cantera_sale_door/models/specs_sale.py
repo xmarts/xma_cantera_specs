@@ -898,6 +898,7 @@ class SpecsSale(models.Model):
 				for prod_bo in self.env['product.product'].search([]):
 					if product.name == prod_bo.product_template_variant_value_ids.ptav_product_variant_ids.product_template_variant_value_ids.name:
 						return prod_bo.id
+			
            
 	def create_materials_bills(self):
 		materials = []
@@ -922,8 +923,9 @@ class SpecsSale(models.Model):
 				rec.specs_molding_ext_id,
 				rec.specs_sp_line_ids.preparations_ids,
 				rec.specs_glass_line_ids.glass_type_id,
-				rec.specs_rlat,
-				rec.specs_bac
+				# rec.specs_rlat,
+				# rec.specs_bac,
+				# rec.specs_line_ids.accessories_id.id
 			]
 			for product in lista:
 				if product:
@@ -960,10 +962,10 @@ class SpecsSale(models.Model):
 
 	def state_cancel(self):
 		for rec in self:
-			for x in rec.specs_sale_id.order_line:
-				x.unlink()
-			for l in self.env['mrp.bom'].search([('specs_id','=', rec.id)]):
-				l.unlink()
+			# for x in rec.specs_sale_id.order_line:
+			# 	x.unlink()
+			# for l in self.env['mrp.bom'].search([('specs_id','=', rec.id)]):
+			# 	l.unlink()
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_cancel", raise_if_not_found=False)
 			rec.block_changes = True
 			
