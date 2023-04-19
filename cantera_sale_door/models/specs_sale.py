@@ -804,18 +804,22 @@ class SpecsSale(models.Model):
 				for mol_ex in rec.specs_molding_ext_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_molding_ext_id.name == mol_ex.name:
 						var_ex = mol_ex
-				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL' and rec.specs_molding_int_id or rec.specs_molding_ext_id:
+				if str(rec.specs_dc_id.name) == 'SD' or str(rec.specs_dc_id.name) == 'SDSL' or str(rec.specs_dc_id.name) == 'DD' or str(rec.specs_dc_id.name) == 'DDSL':
 					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
-						configuration = var_in.price_mol_arq + var_ex.price_mol_arq
+						if rec.specs_molding_ext_id or rec.specs_molding_int_id:
+							configuration = var_in.price_mol_arq + var_ex.price_mol_arq
 					if str(rec.specs_type_arc_id.name)=='Custom' or str(rec.specs_type_arc_id.name)=='Darla' or str(rec.specs_type_arc_id.name)=='Eliptical' or str(rec.specs_type_arc_id.name)=='Eyebrow' or str(rec.specs_type_arc_id.name)=='Full' or str(rec.specs_type_arc_id.name)=='Gothic' or str(rec.specs_type_arc_id.name)=='Provenzal':
-						configuration = var_in.price_mol_cua + var_ex.price_mol_cua
+						if rec.specs_molding_ext_id or rec.specs_molding_int_id:
+							configuration = var_in.price_mol_cua + var_ex.price_mol_cua
 					else:
 						configuration = 0
 				if str(rec.specs_dc_id.name) == 'SDFS' or str(rec.specs_dc_id.name) == 'SDT' or str(rec.specs_dc_id.name) == 'SDTCP' or str(rec.specs_dc_id.name) == 'SDTCPSL' or str(rec.specs_dc_id.name) == 'SDTSL' or str(rec.specs_dc_id.name) == 'DDFS' or str(rec.specs_dc_id.name) == 'DDT' or str(rec.specs_dc_id.name) == 'DDTCP' or str(rec.specs_dc_id.name) == 'DDTCPSL' or str(rec.specs_dc_id.name) == 'DDTSL' and rec.specs_molding_int_id or rec.specs_molding_ext_id:
 					if str(rec.specs_tyarct_id.name)=='Custom' or str(rec.specs_tyarct_id.name)=='Darla' or str(rec.specs_tyarct_id.name)=='Eliptical' or str(rec.specs_tyarct_id.name)=='Eyebrow' or str(rec.specs_tyarct_id.name)=='Full' or str(rec.specs_tyarct_id.name)=='Gothic' or str(rec.specs_tyarct_id.name)=='Provenzal':
-						configuration = var_in.price_mol_cua + var_ex.price_mol_cua
+						if rec.specs_molding_ext_id or rec.specs_molding_int_id:
+							configuration = var_in.price_mol_cua + var_ex.price_mol_cua
 					if str(rec.specs_tyarct_id.name)=='None' or str(rec.specs_tyarct_id.name)=='Simulated Eyebrow arch':
-						configuration = var_in.price_mol_arq + var_ex.price_mol_arq
+						if rec.specs_molding_ext_id or rec.specs_molding_int_id:
+							configuration = var_in.price_mol_arq + var_ex.price_mol_arq
 			if rec.specs_type == 'railing':
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
