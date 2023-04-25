@@ -863,23 +863,37 @@ class SpecsSale(models.Model):
 					if rec.specs_latchin_id.name == lti.name:
 						latch_in = lti.price_unique
 			latch = (latch_sup * rec.specs_cls) + (latch_in * rec.specs_cli)
+   
 			jac_ex = 0.00
-			jac_in = 0.00
-			jin_ex = 0.00
-			jin_in = 0.00
 			for jac in rec.specs_jac_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_jac_id.name == jac.name:
-						jac_ex = jac.price_unique
+						if rec.specs_jac_id:
+							jac_ex = jac.price_unique
+						else:
+							jac_ex = 0.00
+			jac_in = 0.00
 			for jacin in rec.specs_jacin_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_jacin_id.name == jacin.name:
-						jac_in = jacin.price_unique
+						if rec.specs_jacin_id:
+							jac_in = jacin.price_unique
+						else:
+							jac_in = 0.00
+			jin_ex = 0.00
 			for jin in rec.specs_jin_id.pav_attribute_line_ids.product_template_value_ids:
-					if rec.specs_jacin_id.name == jin.name:
-						jin_ex = jin.price_unique
+					if rec.specs_jin_id.name == jin.name:
+						if rec.specs_jin_id:
+							jin_ex = jin.price_unique
+						else:
+							jin_ex = 0.00
+			jin_in = 0.00
 			for jinin in rec.specs_jinin_id.pav_attribute_line_ids.product_template_value_ids:
 					if rec.specs_jinin_id.name == jinin.name:
-						jin_in = jinin.price_unique
+						if rec.specs_jinin_id:
+							jin_in = jinin.price_unique
+						else:
+							jin_in = 0.00
 			handled = jac_ex + jac_in + jin_ex + jin_in
+   
 			family_conf = price_family + configuration + flashing + smock + latch + handled + total_railing
 			rec.specs_amount_total = family_conf
       
