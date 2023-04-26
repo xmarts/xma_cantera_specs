@@ -834,7 +834,23 @@ class SpecsSale(models.Model):
 							configuration = var_in.price_mol_cua
 						if var_ex and var_in:
 							configuration = var_in.price_mol_cua + var_ex.price_mol_cua
+				if str(rec.specs_dc_id.name) == 'Fixed' or str(rec.specs_dc_id.name) == 'Awning' or str(rec.specs_dc_id.name) == 'Casement':
+					if str(rec.specs_type_arc_id.name)=='None' or str(rec.specs_type_arc_id.name)=='Simulated Eyebrow arch':
+						if var_ex:
+							configuration = var_ex.price_mol_cua
+						if var_in:
+							configuration = var_in.price_mol_cua
+						if var_ex and var_in:
+							configuration = var_in.price_mol_cua + var_ex.price_mol_cua
+					if str(rec.specs_type_arc_id.name)=='Custom' or str(rec.specs_type_arc_id.name)=='Darla' or str(rec.specs_type_arc_id.name)=='Eliptical' or str(rec.specs_type_arc_id.name)=='Eyebrow' or str(rec.specs_type_arc_id.name)=='Full' or str(rec.specs_type_arc_id.name)=='Gothic' or str(rec.specs_type_arc_id.name)=='Provenzal':
+						if var_ex:
+							configuration = var_ex.price_mol_arq
+						if var_in:
+							configuration = var_in.price_mol_arq
+						if var_ex and var_in:
+							configuration = var_in.price_mol_arq + var_ex.price_mol_arq
 			if rec.specs_type == 'railing':
+				rec.specs_mtrs = total
 				if rec.specs_tramrec:
 					linea = self.env['railing'].search([('name', '=', 'Straight')])
 					tramo_recto = rec.specs_tramrec * linea.price 
