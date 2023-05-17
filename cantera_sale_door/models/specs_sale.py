@@ -929,13 +929,19 @@ class SpecsSale(models.Model):
 	def save_total_specs(self):
 		for rec in self:
 			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			template = self.env['product.template'].search([('name', '=', rec.product_id.name)])
+			for t in template:
+				product_template = t.id
 			self.env['sale.order.line'].create(
 				{
+					'display_type':'line_section',
 					'order_id': rec.specs_sale_id.id,
 					'product_id': rec.product_id.id,
+					'product_template_id': product_template,
 					'price_unit': rec.specs_amount_total,
 					'name': rec.name_specs,
 					'product_uom': unit.id,
+					'customer_lead': 1.00,
 					'product_uom_qty': 1.00,
 				}
 			)
@@ -973,9 +979,6 @@ class SpecsSale(models.Model):
 				rec.specs_molding_ext_id,
 				rec.specs_sp_line_ids.preparations_ids,
 				rec.specs_glass_line_ids.glass_type_id,
-				# rec.specs_rlat,
-				# rec.specs_bac,
-				# rec.specs_line_ids.accessories_id.id
 			]
 			for product in lista:
 				if product:
