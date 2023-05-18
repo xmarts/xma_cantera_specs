@@ -1003,7 +1003,7 @@ class SpecsSale(models.Model):
 							'product_qty': 1.00,
 						}
 					)
-			#rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
+			rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
     
 	@api.model
 	def _read_group_stage_ids(self, stages, domain, order):
