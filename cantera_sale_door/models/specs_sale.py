@@ -927,14 +927,14 @@ class SpecsSale(models.Model):
 				rec.name_specs=nombre
     
 	def save_total_specs(self):
+		self.ensure_one()
 		for rec in self:
-			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			unit = self.env['uom.uom'].search([('name', '=', 'Unidades')])
+			_logger.info(unit,'################################################################################333')
 			template = self.env['product.template'].search([('name', '=', rec.product_id.name)])
 			for t in template:
 				product_template = t.id
-			self.env['sale.order.line'].create(
-				{
-					'display_type':'line_section',
+			caso = {
 					'order_id': rec.specs_sale_id.id,
 					'product_id': rec.product_id.id,
 					'product_template_id': product_template,
@@ -944,7 +944,7 @@ class SpecsSale(models.Model):
 					'customer_lead': 1.00,
 					'product_uom_qty': 1.00,
 				}
-			)
+			self.env['sale.order.line'].create(caso)
 			rec.stage_id = self.env.ref("cantera_sale_door.stage_planned", raise_if_not_found=False)
    
    
@@ -959,7 +959,7 @@ class SpecsSale(models.Model):
 	def create_materials_bills(self):
 		materials = []
 		for rec in self:
-			unit = self.env['uom.uom'].search([('name', '=', 'Units')])
+			unit = self.env['uom.uom'].search([('name', '=', 'Unidades')])
 			lista = [
 				rec.specs_color_id,
 				rec.specs_board_id,
@@ -984,6 +984,7 @@ class SpecsSale(models.Model):
 				if product:
 					materials.append(rec.materials_bills_create(product))
 			for l in self.env['sale.order.line'].search([('order_id', '=', rec.specs_sale_id.id)]):
+				_logger.info(l.name,'################################################################################333')
 				bills = self.env['mrp.bom'].create(
 					{
 					'product_tmpl_id': l.product_template_id.id,
@@ -1002,7 +1003,7 @@ class SpecsSale(models.Model):
 							'product_qty': 1.00,
 						}
 					)
-			rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
+			#rec.stage_id = self.env.ref("cantera_sale_door.stage_finish", raise_if_not_found=False)
     
 	@api.model
 	def _read_group_stage_ids(self, stages, domain, order):
